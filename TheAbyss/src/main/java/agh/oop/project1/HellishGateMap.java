@@ -7,6 +7,10 @@ import java.util.stream.Stream;
 
 public class HellishGateMap extends AWorldMap{
 
+    public static Vector2d getUpper_bound() {
+        return upper_bound;
+    }
+
     private static final Vector2d LOWER_BOUND = new Vector2d(0,0);
     private static Vector2d upper_bound;
 
