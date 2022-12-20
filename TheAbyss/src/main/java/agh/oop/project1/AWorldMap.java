@@ -10,8 +10,10 @@ import java.util.Set;
 
 public abstract class AWorldMap implements IWorldMap, IPositionChangeObserver{
     protected Multimap<Vector2d, Animal> animals = HashMultimap.create();
-    protected Map<Vector2d, Plant> plants = new HashMap<>();
 
+    private int date = 0;
+
+    SimulationOptions simulationOptions;
 
     @Override
     public boolean place(Animal animal){
@@ -19,12 +21,19 @@ public abstract class AWorldMap implements IWorldMap, IPositionChangeObserver{
             throw new IllegalArgumentException(animal.getPosition() + " is not a valid place to place an animal");
         }
         animals.put(animal.getPosition(), animal);
-        animal.addObserver(this);
         return true;
     }
 
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition, Animal animalToRemove){
         animals.remove(oldPosition, animalToRemove);
         animals.put(newPosition, animalToRemove);
+    }
+
+    public SimulationOptions getSimulationOptions() {
+        return simulationOptions;
+    }
+
+    public int getDate() {
+        return date;
     }
 }

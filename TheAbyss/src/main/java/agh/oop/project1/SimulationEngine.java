@@ -1,42 +1,62 @@
 package agh.oop.project1;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SimulationEngine {
 
-    SimulationOptions simulationOptions;
-    IWorldMap map;
+    private SimulationOptions simulationOptions;
+    private IPreferableFields preferableFields;
+    private IWorldMap map;
 
-    public List<Animal> animals;
+    public Multimap<Vector2d, Animal> animals = HashMultimap.create();
+    List<IAnimalDeathObserver> animalDeathObserverList = new ArrayList<>();
 
     public SimulationEngine(SimulationOptions simulationOptions){
         this.simulationOptions = simulationOptions;
-        map = new HellishGateMap(simulationOptions.mapWidth(), simulationOptions.mapHeight());
-        // Ustawianie roślin
+        if(simulationOptions.areDeadAnimalsToxic()){
+            preferableFields = new ToxicCorsesPreferableFields(simulationOptions.mapWidth(), simulationOptions.mapHeight());
+            animalDeathObserverList.add((IAnimalDeathObserver) preferableFields);
+        } else {
+            preferableFields = new EquatorPreferableFields(simulationOptions.mapWidth(), simulationOptions.mapHeight());
+        }
+        map = new HellishGateMap(simulationOptions.mapWidth(), simulationOptions.mapHeight(), simulationOptions, preferableFields);
         // Ustawianie zwierząt
     }
 
     public void run(){
         // Pokaż mapę
         while(/*warunek na kontynuację symulacji*/){
-            for (int i = 0; i< animals.size(); i++) {
-                if(animals.get(i).getEnergy()<=0) {
-                    //ew. zwiększ licznik śmierci na polu
-                    //usuń zwierze z mapy
-                    animals.remove(i);
+            List<Animal> animalsList = animals.values().stream().toList();
+            for (int i = 0; i< animalsList.size(); i++) {
+                if(animalsList.get(i).getEnergy()<=0) {
+                    notifyAnimalDeathObservers(animalsList.get(i));
+                    map.remove(animalsList.get(i));
+                    animals.remove(animalsList.get(i).getPosition(), animalsList.get(i));
                 } else {
-                    animals.get(i).executeGene();
-                    animals.get(i).move();
-                    if(animals.get(i).getPosition().x() < 0 || animals.get(i).getPosition().y() < 0 || /*animal poza górnym boundsem*/){
-                        // tp go
-                        animals.get(i).subtractEnergy(simulationOptions.reproductionCost());
-                    }
+                    animalsList.get(i).executeGene();
+                    animalsList.get(i).move();
                 }
-                // Jedzenie roślin
-                // Rozmnażanie
-                // Wzrost roślin
+                map.eatAndPlaceNewPlants();
+                for (Vector2d j: animals.keySet()) {
+                    Animal[] animalsToBreed = (Animal[]) Animal.fightForYourDeath(animals.get(j), 2).toArray();
+                    Animal newborn = new Animal(animalsToBreed[0], animalsToBreed[1]);
+                    animals.put(newborn.getPosition(), newborn);
+                    map.place(newborn);
+                }
             }
             // Pokaż mapę
+        }
+    }
+
+    private void notifyAnimalDeathObservers(Animal animal){
+        for (IAnimalDeathObserver i :
+                animalDeathObserverList) {
+            i.animalDied(animal);
         }
     }
 }

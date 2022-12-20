@@ -27,6 +27,7 @@ public interface IWorldMap {
      * @return True if the animal was placed. The animal cannot be placed if the map is already occupied.
      */
     boolean place(Animal animal);
+    boolean remove(Animal animal);
 
     /**
      * Return true if given position on the map is occupied. Should not be
@@ -41,6 +42,8 @@ public interface IWorldMap {
         return (!animalsAt(position).isEmpty()) || (plantAt(position) != null);
     }
 
+    void eatAndPlaceNewPlants();
+
     /**
      * Return an object at a given position.
      *
@@ -50,8 +53,8 @@ public interface IWorldMap {
      */
     Collection<Animal> animalsAt(Vector2d position);
     Plant plantAt(Vector2d position);
-
     Vector2d getNewPosition(Vector2d position, MapDirection orientation);
-
     MapDirection getNewOrientation(Vector2d position, MapDirection orientation);
+    public SimulationOptions getSimulationOptions();
+    public int getDate();
 }

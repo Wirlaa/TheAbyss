@@ -12,9 +12,9 @@ public class Plant extends AMapElement {
     }
 
     //@Override
-    public String getImagePath() {
+    /*public String getImagePath() {
         return "src/main/resources/plant.png";
-    }
+    }*/
 
     @Override
     public String getMapLabel() {
