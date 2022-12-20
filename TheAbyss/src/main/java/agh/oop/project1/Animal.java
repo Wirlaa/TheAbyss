@@ -15,7 +15,7 @@ public class Animal extends AMapElement {
     public Animal(Vector2d initialPosition, IWorldMap map, Genotype genes, int initialEnergy){
         Random rng = new Random();
         position = initialPosition;
-        orientation = MapDirection.values()[rng.nextInt() & 8];
+        orientation = MapDirection.values()[rng.nextInt(0,8)];
         this.map = map;
         energy = initialEnergy;
         genes.mutateGenes(map.getSimulationOptions().minMutatedGenes(), map.getSimulationOptions().maxMutatedGenes());
@@ -31,7 +31,7 @@ public class Animal extends AMapElement {
     public Animal(Animal animal1, Animal animal2){
         Random rng = new Random();
         position = animal1.getPosition();
-        orientation = MapDirection.values()[rng.nextInt() & 8];
+        orientation = MapDirection.values()[rng.nextInt(0,8)];
         this.map = animal1.getmap();
         genes = new Genotype(animal1, animal2);
         genes.mutateGenes(map.getSimulationOptions().minMutatedGenes(), map.getSimulationOptions().maxMutatedGenes());
@@ -68,7 +68,7 @@ public class Animal extends AMapElement {
     private void positionChanged(Vector2d oldPosition, Vector2d newPosition){
         ((IPositionChangeObserver) map).positionChanged(oldPosition, newPosition, this);
         for (IPositionChangeObserver i : positionChangeObservers) {
-            i.positionChanged(oldPosition, newPosition, this);
+            i.positionChanged(oldPosition, position, this);
         }
     }
 

@@ -1,9 +1,8 @@
 package agh.oop.project1;
 
-import com.google.common.collect.HashBasedTable;
-
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.Map.Entry.comparingByValue;
 
 public class ToxicCorsesPreferableFields implements IPreferableFields, IAnimalDeathObserver{
     HashMap<Vector2d, Integer> deathCount = new HashMap<>();
@@ -25,34 +24,22 @@ public class ToxicCorsesPreferableFields implements IPreferableFields, IAnimalDe
     }
 
     @Override
-    public Set<Vector2d> betterFields() { // To może w przyszłości generować brzydkie rzeczy, trzebaby kiedyś napisać lepszą wersję
-        return new HashSet<>(
-                deathCount.entrySet().stream()
-                .sorted(new Comparator(){
-                    public int compare(Object o1, Object o2)
-                    {
-                        return ((Map.Entry<Vector2d, Integer>)o1).getValue().compareTo(((Map.Entry<Vector2d, Integer>)o2).getValue());
-                    }
-                })
+    public List<Vector2d> betterFields() { // To może w przyszłości generować brzydkie rzeczy, trzebaby kiedyś napisać lepszą wersję
+        return new ArrayList<>( deathCount.entrySet()
+                .stream()
+                .sorted(Collections.reverseOrder(comparingByValue()))
                 .limit(fieldsCount/5)
-                .map(x -> { return ((Map.Entry<?, ?>) x).getKey() ;})
-                .toList()
-        );
+                .map(x -> { return ((Vector2d)((Map.Entry<?, ?>) x).getKey()) ;})
+                .toList() );
     }
 
     @Override
-    public Set<Vector2d> worseFields() {
-        return new HashSet<>(
-                deathCount.entrySet().stream()
-                        .sorted(new Comparator(){
-                            public int compare(Object o1, Object o2)
-                            {
-                                return ((Map.Entry<Vector2d, Integer>)o2).getValue().compareTo(((Map.Entry<Vector2d, Integer>)o1).getValue());
-                            }
-                        })
-                        .limit(fieldsCount/5)
-                        .map(x -> { return ((Map.Entry<?, ?>) x).getKey() ;})
-                        .toList()
-        );
+    public List<Vector2d> worseFields() {
+        return new ArrayList<>( deathCount.entrySet()
+                .stream()
+                .sorted(comparingByValue())
+                .limit((fieldsCount/5)*4)
+                .map(x -> { return ((Vector2d)((Map.Entry<?, ?>) x).getKey()) ;})
+                .toList() );
     }
 }

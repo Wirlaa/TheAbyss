@@ -8,7 +8,7 @@ public class Plant extends AMapElement {
 
     @Override
     public String toString() {
-        return "*";
+        return "* ";
     }
 
     //@Override

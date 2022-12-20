@@ -4,6 +4,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface IPreferableFields {
-    Set<Vector2d> betterFields();
-    Set<Vector2d> worseFields();
+    List<Vector2d> betterFields();
+    List<Vector2d> worseFields();
 }
