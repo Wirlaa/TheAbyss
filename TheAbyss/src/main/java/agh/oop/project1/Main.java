@@ -4,10 +4,10 @@ public class Main {
     public static void main(String[] args) {
         SimulationOptions simulationOptions = new SimulationOptions(200,
                 46,
-                300,
+                20,
                 10,
                 5,
-                true,
+                false,
                 4,
                 20000,
                 10,
