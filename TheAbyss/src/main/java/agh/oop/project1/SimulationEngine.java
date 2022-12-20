@@ -3,60 +3,65 @@ package agh.oop.project1;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class SimulationEngine {
+public class SimulationEngine implements IPositionChangeObserver {
 
     private SimulationOptions simulationOptions;
     private IPreferableFields preferableFields;
     private IWorldMap map;
 
     public Multimap<Vector2d, Animal> animals = HashMultimap.create();
-    List<IAnimalDeathObserver> animalDeathObserverList = new ArrayList<>();
 
-    public SimulationEngine(SimulationOptions simulationOptions){
+    public SimulationEngine(IWorldMap map, SimulationOptions simulationOptions){
+        Random rng = new Random();
         this.simulationOptions = simulationOptions;
-        if(simulationOptions.areDeadAnimalsToxic()){
-            preferableFields = new ToxicCorsesPreferableFields(simulationOptions.mapWidth(), simulationOptions.mapHeight());
-            animalDeathObserverList.add((IAnimalDeathObserver) preferableFields);
-        } else {
-            preferableFields = new EquatorPreferableFields(simulationOptions.mapWidth(), simulationOptions.mapHeight());
+        this.map = map;
+        Animal animal;
+        for (int i = 0; i < simulationOptions.startingAnimalsCount(); i++) {
+            animal = new Animal(new Vector2d(rng.nextInt(simulationOptions.mapWidth()), rng.nextInt(simulationOptions.mapHeight())),map,simulationOptions.genomeLength(), simulationOptions.startingEnergy());
+            animal.addPositionChangeObserver(this);
+            animals.put(animal.getPosition(), animal);
+            map.placeAnimal(animal);
         }
-        map = new HellishGateMap(simulationOptions.mapWidth(), simulationOptions.mapHeight(), simulationOptions, preferableFields);
-        // Ustawianie zwierząt
     }
 
-    public void run(){
-        // Pokaż mapę
-        while(/*warunek na kontynuację symulacji*/){
+    public void run() throws InterruptedException {
+        MapVisualizer mapVisualizer = new MapVisualizer(map);
+        System.out.println( mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
+        while(true){
             List<Animal> animalsList = animals.values().stream().toList();
-            for (int i = 0; i< animalsList.size(); i++) {
-                if(animalsList.get(i).getEnergy()<=0) {
-                    notifyAnimalDeathObservers(animalsList.get(i));
-                    map.remove(animalsList.get(i));
-                    animals.remove(animalsList.get(i).getPosition(), animalsList.get(i));
+            for (Animal animal : animalsList) {
+                if (animal.getEnergy() <= 0) {
+                    map.killAnimal(animal);
+                    animals.remove(animal.getPosition(), animal);
                 } else {
-                    animalsList.get(i).executeGene();
-                    animalsList.get(i).move();
+                    animal.executeGene();
+                    animal.move();
                 }
-                map.eatAndPlaceNewPlants();
-                for (Vector2d j: animals.keySet()) {
-                    Animal[] animalsToBreed = (Animal[]) Animal.fightForYourDeath(animals.get(j), 2).toArray();
-                    Animal newborn = new Animal(animalsToBreed[0], animalsToBreed[1]);
+                System.out.println( mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
+                Thread.sleep(2000);
+            }
+            map.eatAndPlaceNewPlants();
+            for (Vector2d j : animals.keySet()) {
+                Object[] animalsToBreed = Animal.fightForYourDeath(animals.get(j), 2).toArray();
+                if (animalsToBreed.length == 2) {
+                    Animal newborn = new Animal((Animal) animalsToBreed[0], (Animal) animalsToBreed[1]);
+                    newborn.addPositionChangeObserver(this);
                     animals.put(newborn.getPosition(), newborn);
-                    map.place(newborn);
+                    map.placeAnimal(newborn);
                 }
             }
-            // Pokaż mapę
+            // Wait
+            System.out.println( mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
         }
     }
 
-    private void notifyAnimalDeathObservers(Animal animal){
-        for (IAnimalDeathObserver i :
-                animalDeathObserverList) {
-            i.animalDied(animal);
-        }
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition, Animal animal) {
+        animals.remove(oldPosition,animal);
+        animals.put(newPosition, animal);
     }
 }

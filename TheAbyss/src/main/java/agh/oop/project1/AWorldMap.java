@@ -16,7 +16,7 @@ public abstract class AWorldMap implements IWorldMap, IPositionChangeObserver{
     SimulationOptions simulationOptions;
 
     @Override
-    public boolean place(Animal animal){
+    public boolean placeAnimal(Animal animal){
         if(!canMoveTo(animal.getPosition())) {
             throw new IllegalArgumentException(animal.getPosition() + " is not a valid place to place an animal");
         }

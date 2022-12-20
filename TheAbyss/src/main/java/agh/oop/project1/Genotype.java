@@ -19,14 +19,16 @@ public class Genotype {
 
     public Genotype(int geneCount){
         Random rng = new Random();
+        genes = new ArrayList<>();
         for(int i = 0; i< geneCount; i++){
-            genes.add(rng.nextInt() & 8);
+            genes.add(rng.nextInt(0,8));
         }
-        this.activeGene = rng.nextInt() % genes.size();
+        this.activeGene = rng.nextInt(0,genes.size());
     }
 
     public Genotype(Animal animal1, Animal animal2) {
         Random rng = new Random();
+        genes = new ArrayList<>();
         int parentEnergySum = animal1.getEnergy() + animal2.getEnergy();
         int genesFrom1 = animal1.getEnergy() / parentEnergySum * animal1.getGenes().size();
         int genesFrom2 = animal2.getGenes().size() - genesFrom1;

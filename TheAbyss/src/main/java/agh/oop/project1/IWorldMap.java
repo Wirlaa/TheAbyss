@@ -26,8 +26,8 @@ public interface IWorldMap {
      *            The animal to place on the map.
      * @return True if the animal was placed. The animal cannot be placed if the map is already occupied.
      */
-    boolean place(Animal animal);
-    boolean remove(Animal animal);
+    boolean placeAnimal(Animal animal);
+    boolean killAnimal(Animal animal);
 
     /**
      * Return true if given position on the map is occupied. Should not be
@@ -57,4 +57,6 @@ public interface IWorldMap {
     MapDirection getNewOrientation(Vector2d position, MapDirection orientation);
     public SimulationOptions getSimulationOptions();
     public int getDate();
+
+    public Vector2d getUpperRightBound();
 }
