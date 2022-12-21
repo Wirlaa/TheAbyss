@@ -6,6 +6,7 @@ import com.google.common.collect.Multimap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class SimulationEngine implements IPositionChangeObserver {
 
@@ -34,6 +35,7 @@ public class SimulationEngine implements IPositionChangeObserver {
         while(true){
             List<Animal> animalsList = animals.values().stream().toList();
             for (Animal animal : animalsList) {
+                animal.subtractEnergy(1);
                 if (animal.getEnergy() <= 0) {
                     map.killAnimal(animal);
                     animals.remove(animal.getPosition(), animal);
@@ -41,12 +43,10 @@ public class SimulationEngine implements IPositionChangeObserver {
                     animal.executeGene();
                     animal.move();
                 }
-                System.out.println( mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
-                Thread.sleep(2000);
             }
             map.eatAndPlaceNewPlants();
             for (Vector2d j : animals.keySet()) {
-                Object[] animalsToBreed = Animal.fightForYourDeath(animals.get(j), 2).toArray();
+                Object[] animalsToBreed = Animal.fightForYourDeath(animals.get(j).stream().filter(x -> {return x.getEnergy() >= simulationOptions.minEnergyToReproduce();}).toList(), 2).toArray();
                 if (animalsToBreed.length == 2) {
                     Animal newborn = new Animal((Animal) animalsToBreed[0], (Animal) animalsToBreed[1]);
                     newborn.addPositionChangeObserver(this);
@@ -54,7 +54,7 @@ public class SimulationEngine implements IPositionChangeObserver {
                     map.placeAnimal(newborn);
                 }
             }
-            // Wait
+            Thread.sleep(10);
             System.out.println( mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
         }
     }

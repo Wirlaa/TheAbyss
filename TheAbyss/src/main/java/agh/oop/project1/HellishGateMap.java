@@ -24,10 +24,10 @@ public class HellishGateMap extends AWorldMap{
         } else {
             preferableFields = new EquatorPreferableFields(simulationOptions.mapWidth(), simulationOptions.mapHeight());
         }
-        placeNPlants(simulationOptions, simulationOptions.startingPlantsCount());
+        placeNPlants(simulationOptions.startingPlantsCount());
     }
 
-    private void placeNPlants(SimulationOptions simulationOptions, int n) {
+    private void placeNPlants(int n) {
         Random rng = new Random();
         List<Vector2d> betterFields = preferableFields.betterFields();
         Collections.shuffle(betterFields);
@@ -78,9 +78,16 @@ public class HellishGateMap extends AWorldMap{
 
     @Override
     public void eatAndPlaceNewPlants() {
-        // Do napisania
-        // Eat Plants
-        // Place Plants
+        for (Vector2d pos : animals.keySet()) {
+            if(plants.get(pos) != null){
+                Animal eatingAnimal = (Animal.fightForYourDeath(animals.get(pos), 1).size() == 1 ? Animal.fightForYourDeath(animals.get(pos), 1).get(0) : null);
+                if (eatingAnimal != null){
+                    plants.remove(pos);
+                    eatingAnimal.addEnergy(simulationOptions.energyFromOnePlant());
+                }
+            }
+        }
+        placeNPlants(simulationOptions.plantsGrowingEachDay());
     }
 
     @Override

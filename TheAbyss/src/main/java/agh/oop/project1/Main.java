@@ -2,14 +2,15 @@ package agh.oop.project1;
 
 public class Main {
     public static void main(String[] args) {
-        SimulationOptions simulationOptions = new SimulationOptions(200,
-                46,
+        SimulationOptions simulationOptions = new SimulationOptions(
                 20,
-                10,
+                20,
+                20,
+                100,
                 5,
                 false,
-                4,
-                20000,
+                20,
+                20,
                 10,
                 2,
                 1,

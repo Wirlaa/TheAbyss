@@ -20,10 +20,10 @@ public class EquatorPreferableFields implements IPreferableFields {
                 }
             }
             for(int i=0; i<width; i++){
-                if(rng.nextDouble(0,1) <= (preferableFieldsCount - (fullRowsCount*width))/(float)preferableFieldsCount){
+                if(rng.nextDouble(0,1) <= (preferableFieldsCount - (fullRowsCount*width))/(float)(2*width)){
                     betterFields.add(new Vector2d(i, (int) ceil((height/2 + fullRowsCount/2 +1))));
                 }
-                if(rng.nextDouble(0,1) <= (preferableFieldsCount - (fullRowsCount*width))/(float)preferableFieldsCount){
+                if(rng.nextDouble(0,1) <= (preferableFieldsCount - (fullRowsCount*width))/(float)(2*width)){
                     betterFields.add(new Vector2d(i, (int) ceil((height/2 - fullRowsCount/2 -1))));
                 }
             }
@@ -44,10 +44,10 @@ public class EquatorPreferableFields implements IPreferableFields {
                 }
             }
             for(int i=0; i<width; i++){
-                if(rng.nextDouble(0,1) <= (preferableFieldsCount - (fullRowsCount*width))/(float)preferableFieldsCount){
+                if(rng.nextDouble(0,1) <= (preferableFieldsCount - (fullRowsCount*width))/(float)(2*width)){
                     betterFields.add(new Vector2d(i, (int) ceil((height/2 + fullRowsCount/2 +1))));
                 }
-                if(rng.nextDouble(0,1) <= (preferableFieldsCount - (fullRowsCount*width))/(float)preferableFieldsCount){
+                if(rng.nextDouble(0,1) <= (preferableFieldsCount - (fullRowsCount*width))/(float)(2*width)){
                     betterFields.add(new Vector2d(i, (int) ceil((height/2 - fullRowsCount/2 -1))));
                 }
             }

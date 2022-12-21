@@ -30,6 +30,8 @@ public class Genotype {
         Random rng = new Random();
         genes = new ArrayList<>();
         int parentEnergySum = animal1.getEnergy() + animal2.getEnergy();
+        if(parentEnergySum == 0)
+            System.out.println("Meh");
         int genesFrom1 = animal1.getEnergy() / parentEnergySum * animal1.getGenes().size();
         int genesFrom2 = animal2.getGenes().size() - genesFrom1;
         if(rng.nextBoolean()){
