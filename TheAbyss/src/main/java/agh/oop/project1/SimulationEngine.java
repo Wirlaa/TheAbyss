@@ -33,29 +33,42 @@ public class SimulationEngine implements IPositionChangeObserver {
         MapVisualizer mapVisualizer = new MapVisualizer(map);
         System.out.println( mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
         while(true){
-            List<Animal> animalsList = animals.values().stream().toList();
-            for (Animal animal : animalsList) {
-                animal.subtractEnergy(1);
-                if (animal.getEnergy() <= 0) {
-                    map.killAnimal(animal);
-                    animals.remove(animal.getPosition(), animal);
-                } else {
-                    animal.executeGene();
-                    animal.move();
-                }
-            }
+            killOrMoveAnimal();
             map.eatAndPlaceNewPlants();
-            for (Vector2d j : animals.keySet()) {
-                Object[] animalsToBreed = Animal.fightForYourDeath(animals.get(j).stream().filter(x -> {return x.getEnergy() >= simulationOptions.minEnergyToReproduce();}).toList(), 2).toArray();
-                if (animalsToBreed.length == 2) {
-                    Animal newborn = new Animal((Animal) animalsToBreed[0], (Animal) animalsToBreed[1]);
-                    newborn.addPositionChangeObserver(this);
-                    animals.put(newborn.getPosition(), newborn);
-                    map.placeAnimal(newborn);
-                }
+            breedTheAnimals();
+            Thread.sleep(2000);
+            System.out.println(mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
+            map.stepDateUp();
+        }
+    }
+
+    private void breedTheAnimals() {
+        for (Vector2d j : animals.keySet()) {
+            Object[] animalsToBreed = Utils.fightForYourDeath(animals.get(j)
+                    .stream()
+                    .filter(x -> {return x.getEnergy() >= simulationOptions.minEnergyToReproduce();})
+                    .toList(), 2)
+                    .toArray();
+            if (animalsToBreed.length == 2) {
+                Animal newborn = new Animal((Animal) animalsToBreed[0], (Animal) animalsToBreed[1]);
+                newborn.addPositionChangeObserver(this);
+                animals.put(newborn.getPosition(), newborn);
+                map.placeAnimal(newborn);
             }
-            Thread.sleep(10);
-            System.out.println( mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
+        }
+    }
+
+    private void killOrMoveAnimal() {
+        List<Animal> animalsList = animals.values().stream().toList();
+        for (Animal animal : animalsList) {
+            animal.subtractEnergy(1);
+            if (animal.getEnergy() <= 0) {
+                map.killAnimal(animal);
+                animals.remove(animal.getPosition(), animal);
+            } else {
+                animal.executeGene();
+                animal.move();
+            }
         }
     }
 

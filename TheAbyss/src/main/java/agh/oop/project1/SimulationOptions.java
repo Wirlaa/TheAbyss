@@ -13,6 +13,4 @@ public record SimulationOptions(int mapWidth,
                                 int minMutatedGenes,
                                 int maxMutatedGenes,
                                 int genomeLength
-) {
-
-}
+) {}

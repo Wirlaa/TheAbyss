@@ -4,12 +4,12 @@ import java.util.*;
 
 import static java.util.Map.Entry.comparingByValue;
 
-public class ToxicCorsesPreferableFields implements IPreferableFields, IAnimalDeathObserver{
+public class ToxicCorpsesPreferableFields implements IPreferableFields, IAnimalDeathObserver{
     HashMap<Vector2d, Integer> deathCount = new HashMap<>();
 
     private int fieldsCount;
 
-    public ToxicCorsesPreferableFields(int width, int height){
+    public ToxicCorpsesPreferableFields(int width, int height){
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 deathCount.put(new Vector2d(i,j),0);
