@@ -17,7 +17,7 @@ public class Main {
                 3,
                 8);
         IWorldMap map = new HellishGateMap(simulationOptions.mapWidth(), simulationOptions.mapHeight(), simulationOptions);
-        SimulationEngine engine = new SimulationEngine(map, simulationOptions);
+        IEngine engine = new SimulationEngine(map, simulationOptions);
         try {
             engine.run();
         } catch (InterruptedException e) {

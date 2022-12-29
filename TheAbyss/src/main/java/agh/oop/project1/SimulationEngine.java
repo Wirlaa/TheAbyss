@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class SimulationEngine implements IPositionChangeObserver {
+public class SimulationEngine implements IPositionChangeObserver, IEngine {
 
     private SimulationOptions simulationOptions;
     private IPreferableFields preferableFields;

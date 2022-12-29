@@ -39,6 +39,12 @@ public class Animal extends AMapElement {
         energy = 2 * map.getSimulationOptions().reproductionCost();
         offspringCount = 0;
         this.birthDate = map.getDate();
+        animal1.labourNotifier();
+        animal2.labourNotifier();
+    }
+
+    public void labourNotifier(){
+        offspringCount++;
     }
 
     public void mutateGenes(){
