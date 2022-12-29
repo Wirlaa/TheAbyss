@@ -2,22 +2,16 @@ package agh.oop.project1;
 
 import com.google.common.collect.*;
 
-import javax.annotation.CheckForNull;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 public abstract class AWorldMap implements IWorldMap, IPositionChangeObserver{
     protected Multimap<Vector2d, Animal> animals = HashMultimap.create();
+    protected int date = 0;
 
-    private int date = 0;
 
     SimulationOptions simulationOptions;
 
     @Override
     public boolean placeAnimal(Animal animal){
-        if(!canMoveTo(animal.getPosition())) {
+        if(!isInBounds(animal.getPosition())) {
             throw new IllegalArgumentException(animal.getPosition() + " is not a valid place to place an animal");
         }
         animals.put(animal.getPosition(), animal);
@@ -35,5 +29,8 @@ public abstract class AWorldMap implements IWorldMap, IPositionChangeObserver{
 
     public int getDate() {
         return date;
+    }
+    public void stepDateUp(){
+        date += 1;
     }
 }

@@ -17,7 +17,7 @@ public interface IWorldMap {
      *            The position checked for the movement possibility.
      * @return True if the object can move to that position.
      */
-    boolean canMoveTo(Vector2d position);
+    boolean isInBounds(Vector2d position);
 
     /**
      * Place a animal on the map.
@@ -59,4 +59,5 @@ public interface IWorldMap {
     public int getDate();
 
     public Vector2d getUpperRightBound();
+    void stepDateUp();
 }

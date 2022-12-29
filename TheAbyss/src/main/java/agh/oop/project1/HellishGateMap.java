@@ -5,11 +5,6 @@ import java.util.*;
 public class HellishGateMap extends AWorldMap{
     protected Map<Vector2d, Plant> plants = new HashMap<>();
     IPreferableFields preferableFields;
-
-    public static Vector2d getUpper_bound() {
-        return upper_bound;
-    }
-
     private static final Vector2d LOWER_BOUND = new Vector2d(0,0);
     private static Vector2d upper_bound;
     List<IAnimalDeathObserver> animalDeathObserverList = new ArrayList<>();
@@ -19,7 +14,7 @@ public class HellishGateMap extends AWorldMap{
         upper_bound = new Vector2d(width-1, height-1);
         this.simulationOptions = simulationOptions;
         if(simulationOptions.areDeadAnimalsToxic()){
-            preferableFields = new ToxicCorsesPreferableFields(simulationOptions.mapWidth(), simulationOptions.mapHeight());
+            preferableFields = new ToxicCorpsesPreferableFields(simulationOptions.mapWidth(), simulationOptions.mapHeight());
             animalDeathObserverList.add((IAnimalDeathObserver) preferableFields);
         } else {
             preferableFields = new EquatorPreferableFields(simulationOptions.mapWidth(), simulationOptions.mapHeight());
@@ -67,12 +62,13 @@ public class HellishGateMap extends AWorldMap{
     }
 
     @Override
-    public boolean canMoveTo(Vector2d dest) {
+    public boolean isInBounds(Vector2d dest) {
         return LOWER_BOUND.precedes(dest) && upper_bound.follows(dest);
     }
 
     @Override
     public boolean killAnimal(Animal animal) {
+        notifyAnimalDeathObservers(animal);
         return animals.remove(animal.getPosition(), animal);
     }
 
@@ -80,7 +76,7 @@ public class HellishGateMap extends AWorldMap{
     public void eatAndPlaceNewPlants() {
         for (Vector2d pos : animals.keySet()) {
             if(plants.get(pos) != null){
-                Animal eatingAnimal = (Animal.fightForYourDeath(animals.get(pos), 1).size() == 1 ? Animal.fightForYourDeath(animals.get(pos), 1).get(0) : null);
+                Animal eatingAnimal = (Utils.fightForYourDeath(animals.get(pos), 1).size() == 1 ? Utils.fightForYourDeath(animals.get(pos), 1).get(0) : null);
                 if (eatingAnimal != null){
                     plants.remove(pos);
                     eatingAnimal.addEnergy(simulationOptions.energyFromOnePlant());
@@ -134,5 +130,9 @@ public class HellishGateMap extends AWorldMap{
                 animalDeathObserverList) {
             i.animalDied(animal);
         }
+    }
+
+    public static Vector2d getUpper_bound() {
+        return upper_bound;
     }
 }
