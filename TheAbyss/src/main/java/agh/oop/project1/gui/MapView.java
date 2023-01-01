@@ -1,8 +1,8 @@
 package agh.oop.project1.gui;
 
-import agh.ics.oop.AWorldMap;
-import agh.ics.oop.IMapElement;
-import agh.ics.oop.Vector2d;
+//import agh.ics.oop.AWorldMap;
+//import agh.ics.oop.IMapElement;
+//import agh.ics.oop.Vector2d;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -20,28 +20,28 @@ public class MapView extends GridPane {
     static final int WIDTH = 48;
     static final int HEIGHT = 48;
     private MapPresenter presenter;
-    private AWorldMap map;
+    //private AWorldMap map;
     private final Map<String, Image> images = new HashMap<>();
-    public MapView(AWorldMap map) {
-        this.map = map;
+    public MapView() {
+        //this.map = map;
         setAlignment(Pos.CENTER);
         setStyle("-fx-background-color: #333333");
         setHgap(1);
         setVgap(1);
-        mapLayout();
-        placeElements();
+        //mapLayout();
+        //placeElements();
     }
     protected void buildView() {
         Platform.runLater(() -> {
             getChildren().clear();
-            mapLayout();
-            placeElements();
+            //mapLayout();
+            //placeElements();
         });
     }
     public void setPresenter (MapPresenter presenter) {
         this.presenter = presenter;
     }
-    private void mapLayout() {
+    /*private void mapLayout() {
         int numOfColumns = map.getUpperBound().getX() - map.getLowerBound().getX();
         int numOfRows = map.getUpperBound().getY() - map.getLowerBound().getY();
 
@@ -83,7 +83,7 @@ public class MapView extends GridPane {
                 return null;
             }
         }
-    }
+    }*/
     private VBox createVbox(Label label) {
         VBox vbox = new VBox(label);
         vbox.setAlignment(Pos.CENTER);

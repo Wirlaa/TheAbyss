@@ -1,5 +1,8 @@
 package agh.oop.project1;
 
+import agh.oop.project1.gui.App;
+import javafx.application.Application;
+
 public class Main {
     public static void main(String[] args) {
         SimulationOptions simulationOptions = new SimulationOptions(
@@ -19,10 +22,18 @@ public class Main {
         IWorldMap map = new HellishGateMap(simulationOptions.mapWidth(), simulationOptions.mapHeight(), simulationOptions);
         IEngine engine = new SimulationEngine(map, simulationOptions);
         try {
+            //Application.launch(AppOld.class, args);
+            Application.launch(App.class, args);
+        } catch (IllegalArgumentException exception) {
+            exception.printStackTrace();
+        }
+        /*
+        try {
             engine.run();
         } catch (InterruptedException e) {
             System.out.println("Engine interruption occured");
             return;
         }
+         */
     }
 }

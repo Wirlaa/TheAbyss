@@ -18,20 +18,16 @@ public class MainView extends BorderPane {
     }
     protected void buildView() {
         setStyle("-fx-background-color: #000000;");
+
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(15, 15, 15, 15));
         hbox.setSpacing(15);
         hbox.setAlignment(Pos.CENTER_LEFT);
 
-        TextField text = new TextField();
-        text.setFocusTraversable(false);
-        text.setPromptText("Enter a valid move directions: f, b, r, l");
-        text.setPrefWidth(225);
-
         Button buttonStart = new Button("Start");
         buttonStart.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
         buttonStart.setStyle("-fx-background-color: #006699; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
-        buttonStart.setOnAction(event -> presenter.start(text));
+        //buttonStart.setOnAction(event -> presenter.startView());
 
         Button buttonStop = new Button("Stop");
         buttonStop.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
@@ -48,7 +44,7 @@ public class MainView extends BorderPane {
         buttonOptions.setStyle("-fx-background-color: #998800; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
         buttonOptions.setOnAction(event -> presenter.switchOptions());
 
-        hbox.getChildren().addAll(text, buttonStart, buttonStop, buttonSwitchAnimal, buttonOptions);
+        hbox.getChildren().addAll(buttonStart, buttonStop, buttonSwitchAnimal, buttonOptions);
         setTop(hbox);
     }
     public void setPresenter (MainPresenter presenter) {
