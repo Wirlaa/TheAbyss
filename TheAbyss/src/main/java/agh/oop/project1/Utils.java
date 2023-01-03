@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Utils {
-
     public static List<Animal> fightForYourDeath(Collection<Animal> animals, int n){
     return animals.stream()
             .sorted((o1, o2) -> {

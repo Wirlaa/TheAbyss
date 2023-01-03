@@ -13,13 +13,13 @@ public class HellishGateMap extends AWorldMap{
         Random rng = new Random();
         upper_bound = new Vector2d(width-1, height-1);
         this.simulationOptions = simulationOptions;
-        if(simulationOptions.areDeadAnimalsToxic()){
+        if(simulationOptions.corpseToxicity()){
             preferableFields = new ToxicCorpsesPreferableFields(simulationOptions.mapWidth(), simulationOptions.mapHeight());
             animalDeathObserverList.add((IAnimalDeathObserver) preferableFields);
         } else {
             preferableFields = new EquatorPreferableFields(simulationOptions.mapWidth(), simulationOptions.mapHeight());
         }
-        placeNPlants(simulationOptions.startingPlantsCount());
+        placeNPlants(simulationOptions.initialPlantCount());
     }
 
     private void placeNPlants(int n) {

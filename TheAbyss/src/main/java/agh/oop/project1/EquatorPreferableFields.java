@@ -3,7 +3,6 @@ package agh.oop.project1;
 import java.util.*;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.ceil;
 
 public class EquatorPreferableFields implements IPreferableFields {
     Set<Vector2d> betterFields = new HashSet<>();
@@ -18,7 +17,7 @@ public class EquatorPreferableFields implements IPreferableFields {
             }
         }
         Collections.shuffle(fields);
-        fields.sort((o1, o2) -> Integer.compare(abs(o1.y() - height / 2), abs(o2.y() - height / 2)));
+        fields.sort(Comparator.comparingInt(o -> abs(o.y() - height / 2)));
         betterFields.addAll(fields.subList(0, (int) (width*height*0.2)));
         worseFields.addAll(fields.subList((int) (width*height*0.2), width*height));
     }

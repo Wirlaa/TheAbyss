@@ -1,5 +1,6 @@
 package agh.oop.project1;
 
-public interface IEngine {
-    public void run() throws InterruptedException;
+public interface IEngine extends Runnable, IPositionChangeObserver, ISimulationChangeObserver {
+    public void run();
+    void addObserver(ISimulationChangeObserver observer);
 }

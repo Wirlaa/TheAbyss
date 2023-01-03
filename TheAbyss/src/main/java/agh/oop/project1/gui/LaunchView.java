@@ -9,9 +9,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
-public class StartView extends BorderPane {
-    private StartPresenter presenter;
-    public StartView() {
+public class LaunchView extends BorderPane {
+    private LaunchPresenter presenter;
+    public LaunchView() {
         buildView();
     }
     protected void buildView() {
@@ -38,27 +38,27 @@ public class StartView extends BorderPane {
         controlsHBox.setSpacing(25);
         controlsHBox.setAlignment(Pos.CENTER);
 
-        // przyciski wczytaj i start
-        Button load = new Button("Load");
-        load.setPrefSize(100, 25);
-        load.setStyle("-fx-background-color: #006699; -fx-text-fill: #CCCCCC; -fx-font-weight: bold; -fx-font-size: 15");
-        //button.setOnAction(event -> action);
+        // przyciski wczytaj, ustaw i start
+        Button showLoadingOptions = new Button("Load options");
+        showLoadingOptions.setPrefSize(120, 25);
+        showLoadingOptions.setStyle("-fx-background-color: #006699; -fx-text-fill: #CCCCCC; -fx-font-weight: bold; -fx-font-size: 15");
+        showLoadingOptions.setOnAction(event -> presenter.showLoadOptions());
 
-        Button start = new Button("Start");
-        start.setPrefSize(100, 25);
-        start.setStyle("-fx-background-color: #009900; -fx-text-fill: #EEEEEE; -fx-font-weight: bold; -fx-font-size: 15");
-        //button.setOnAction(event -> action);
+        Button setOptionsButton = new Button("Set options");
+        setOptionsButton.setPrefSize(120, 25);
+        setOptionsButton.setStyle("-fx-background-color: #990000; -fx-text-fill: #EEEEEE; -fx-font-weight: bold; -fx-font-size: 15");
+        setOptionsButton.setOnAction(event -> presenter.initInputOptions());
 
-        Button exit = new Button("Exit");
-        exit.setPrefSize(100, 25);
-        exit.setStyle("-fx-background-color: #990000; -fx-text-fill: #EEEEEE; -fx-font-weight: bold; -fx-font-size: 15");
-        //button.setOnAction(event -> action);
+        Button startButton = new Button("Start");
+        startButton.setPrefSize(120, 25);
+        startButton.setStyle("-fx-background-color: #009900; -fx-text-fill: #EEEEEE; -fx-font-weight: bold; -fx-font-size: 15");
+        startButton.setOnAction(event -> presenter.startSimulation());
 
-        controlsHBox.getChildren().addAll(load, start, exit);
+        controlsHBox.getChildren().addAll(showLoadingOptions, setOptionsButton, startButton);
         topVBox.getChildren().addAll(simulationParameters,instructions,controlsHBox);
         setTop(topVBox);
     }
-    public void setPresenter (StartPresenter presenter) {
+    public void setPresenter (LaunchPresenter presenter) {
         this.presenter = presenter;
     }
 }

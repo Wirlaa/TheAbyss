@@ -7,9 +7,7 @@ public class Animal extends AMapElement {
     private final List<IPositionChangeObserver> positionChangeObservers = new ArrayList<>();
     private Genotype genes;
     private int energy;
-
     private int offspringCount;
-
     private int birthDate;
 
     public Animal(Vector2d initialPosition, IWorldMap map, Genotype genes, int initialEnergy){
