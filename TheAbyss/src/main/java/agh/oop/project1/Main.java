@@ -10,9 +10,9 @@ public class Main {
                 20,
                 20,
                 100,
-                50,
+                10,
                 false,
-                200,
+                0,
                 20,
                 10,
                 2,
@@ -21,19 +21,19 @@ public class Main {
                 8);
         IWorldMap map = new HellishGateMap(simulationOptions.mapWidth(), simulationOptions.mapHeight(), simulationOptions);
         IEngine engine = new SimulationEngine(map, simulationOptions);
-        try {
+        /*try {
             //Application.launch(AppOld.class, args);
             Application.launch(App.class, args);
         } catch (IllegalArgumentException exception) {
             exception.printStackTrace();
         }
-        /*
+         */
+
         try {
             engine.run();
         } catch (InterruptedException e) {
             System.out.println("Engine interruption occured");
             return;
         }
-         */
     }
 }

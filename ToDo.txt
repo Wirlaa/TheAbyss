@@ -1,4 +1,3 @@
-Naprawić EquatorPreferableFields - źle wyliczane są pola preferowane
 Spróbować odchudzić klasy
 Przejrzeć kod i napisać go ładnie
 
