@@ -10,10 +10,10 @@ import static java.lang.Integer.parseInt;
 
 public class LoadOptionsPresenter {
     private final LoadOptionsView view;
-    private final MainPresenter mainPresenter;
-    public LoadOptionsPresenter(LoadOptionsView view, MainPresenter mainPresenter) {
+    private final LaunchPresenter launchPresenter;
+    public LoadOptionsPresenter(LoadOptionsView view, LaunchPresenter launchPresenter) {
         this.view = view;
-        this.mainPresenter = mainPresenter;
+        this.launchPresenter = launchPresenter;
         this.view.setPresenter(this);
     }
     public LoadOptionsView getView() {
@@ -39,8 +39,8 @@ public class LoadOptionsPresenter {
                 }
                 else throw new IllegalArgumentException(stringOptions[i] + " is not a legal simulation option");
             }
-            mainPresenter.setOptions(intOptions,corpseToxicity);
-            mainPresenter.showOptions(false);
+            launchPresenter.setOptions(intOptions,corpseToxicity);
+            launchPresenter.showOptions(false);
         }
         catch (
                 IOException exception) {

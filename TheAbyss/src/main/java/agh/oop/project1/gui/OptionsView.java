@@ -1,5 +1,6 @@
 package agh.oop.project1.gui;
 
+import agh.oop.project1.SimulationOptions;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -92,7 +93,11 @@ public class OptionsView extends VBox {
         if (allowInput) {
             setBoxesWithTextFields();
         } else {
-            setValues();
+            if (presenter.getMainPresenter() != null ) {
+                setValues(presenter.getMainPresenter().getOptions());
+            } else if (presenter.getLaunchPresenter() != null ) {
+                setValues(presenter.getLaunchPresenter().getOptions());
+            }
             setBoxes();
         }
         getChildren().clear();
@@ -168,8 +173,7 @@ public class OptionsView extends VBox {
         return button;
     }
      */
-    private HBox createHBoxWithTextField(Label name, Label current, Node textField) {
-        //HBox hbox = new HBox(name, current, textField);
+    private HBox createHBoxWithTextField(Label name, Node textField) {
         HBox hbox = new HBox(name, textField);
         hbox.setSpacing(10);
         hbox.setAlignment(Pos.CENTER);
@@ -181,50 +185,50 @@ public class OptionsView extends VBox {
         hbox.setAlignment(Pos.CENTER);
         return hbox;
     }
-    private void setValues() {
-        mapWidthValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().mapWidth()));
-        mapHeightValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().mapHeight()));
-        corpseToxicityValueLabel = createValueLabel(Boolean.toString(presenter.getMainPresenter().getOptions().corpseToxicity()));
-        initialPlantCountValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().initialPlantCount()));
-        initialAnimalCountValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().initialAnimalCount()));
-        plantsGrowingEachDayValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().plantsGrowingEachDay()));
-        startingEnergyValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().startingEnergy()));
-        energyFromOnePlantValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().energyFromOnePlant()));
-        energyToReproduceValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().energyToReproduce()));
-        reproductionCostValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().reproductionCost()));
-        minMutatedGenesValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().minMutatedGenes()));
-        maxMutatedGenesValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().maxMutatedGenes()));
-        genomeLengthValueLabel = createValueLabel(Integer.toString(presenter.getMainPresenter().getOptions().genomeLength()));
+    private void setValues(SimulationOptions options) {
+        mapWidthValueLabel = createValueLabel(Integer.toString(options.mapWidth()));
+        mapHeightValueLabel = createValueLabel(Integer.toString(options.mapHeight()));
+        corpseToxicityValueLabel = createValueLabel(Boolean.toString(options.corpseToxicity()));
+        initialPlantCountValueLabel = createValueLabel(Integer.toString(options.initialPlantCount()));
+        initialAnimalCountValueLabel = createValueLabel(Integer.toString(options.initialAnimalCount()));
+        plantsGrowingEachDayValueLabel = createValueLabel(Integer.toString(options.plantsGrowingEachDay()));
+        startingEnergyValueLabel = createValueLabel(Integer.toString(options.startingEnergy()));
+        energyFromOnePlantValueLabel = createValueLabel(Integer.toString(options.energyFromOnePlant()));
+        energyToReproduceValueLabel = createValueLabel(Integer.toString(options.energyToReproduce()));
+        reproductionCostValueLabel = createValueLabel(Integer.toString(options.reproductionCost()));
+        minMutatedGenesValueLabel = createValueLabel(Integer.toString(options.minMutatedGenes()));
+        maxMutatedGenesValueLabel = createValueLabel(Integer.toString(options.maxMutatedGenes()));
+        genomeLengthValueLabel = createValueLabel(Integer.toString(options.genomeLength()));
     }
     private void setBoxesWithTextFields() {
         mapWidthTextField = createTextField();
-        mapWidthBox = createHBoxWithTextField(mapWidthNameLabel,mapHeightValueLabel,mapWidthTextField);
+        mapWidthBox = createHBoxWithTextField(mapWidthNameLabel,mapWidthTextField);
         mapHeightTextField = createTextField();
-        mapHeightBox = createHBoxWithTextField(mapHeightNameLabel,mapWidthValueLabel,mapHeightTextField);
+        mapHeightBox = createHBoxWithTextField(mapHeightNameLabel,mapHeightTextField);
         corpseToxicityCheckBox = new CheckBox();
         corpseToxicityCheckBox.setMinWidth(90);
         corpseToxicityCheckBox.setPadding(new Insets(0, 35, 0, 35));
-        corpseToxicityBox = createHBoxWithTextField(corpseToxicityNameLabel,corpseToxicityValueLabel, corpseToxicityCheckBox);
+        corpseToxicityBox = createHBoxWithTextField(corpseToxicityNameLabel, corpseToxicityCheckBox);
         initialPlantCountTextField = createTextField();
-        initialPlantCountBox = createHBoxWithTextField(initialPlantCountNameLabel,initialPlantCountValueLabel,initialPlantCountTextField);
+        initialPlantCountBox = createHBoxWithTextField(initialPlantCountNameLabel,initialPlantCountTextField);
         initialAnimalCountTextField = createTextField();
-        initialAnimalCountBox = createHBoxWithTextField(initialAnimalCountNameLabel,initialAnimalCountValueLabel,initialAnimalCountTextField);
+        initialAnimalCountBox = createHBoxWithTextField(initialAnimalCountNameLabel,initialAnimalCountTextField);
         plantsGrowingEachDayTextField = createTextField();
-        plantsGrowingEachDayBox = createHBoxWithTextField(plantsGrowingEachDayNameLabel,plantsGrowingEachDayValueLabel,plantsGrowingEachDayTextField);
+        plantsGrowingEachDayBox = createHBoxWithTextField(plantsGrowingEachDayNameLabel,plantsGrowingEachDayTextField);
         startingEnergyTextField = createTextField();
-        startingEnergyBox = createHBoxWithTextField(startingEnergyNameLabel,startingEnergyValueLabel,startingEnergyTextField);
+        startingEnergyBox = createHBoxWithTextField(startingEnergyNameLabel,startingEnergyTextField);
         energyFromOnePlantTextField = createTextField();
-        energyFromOnePlantBox = createHBoxWithTextField(energyFromOnePlantNameLabel,energyFromOnePlantValueLabel,energyFromOnePlantTextField);
+        energyFromOnePlantBox = createHBoxWithTextField(energyFromOnePlantNameLabel,energyFromOnePlantTextField);
         energyToReproduceTextField = createTextField();
-        energyToReproduceBox = createHBoxWithTextField(energyToReproduceNameLabel,energyToReproduceValueLabel,energyToReproduceTextField);
+        energyToReproduceBox = createHBoxWithTextField(energyToReproduceNameLabel,energyToReproduceTextField);
         reproductionCostTextField = createTextField();
-        reproductionCostBox = createHBoxWithTextField(reproductionCostNameLabel,reproductionCostValueLabel,reproductionCostTextField);
+        reproductionCostBox = createHBoxWithTextField(reproductionCostNameLabel,reproductionCostTextField);
         minMutatedGenesTextField = createTextField();
-        minMutatedGenesBox = createHBoxWithTextField(minMutatedGenesNameLabel,minMutatedGenesValueLabel,minMutatedGenesTextField);
+        minMutatedGenesBox = createHBoxWithTextField(minMutatedGenesNameLabel,minMutatedGenesTextField);
         maxMutatedGenesTextField = createTextField();
-        maxMutatedGenesBox = createHBoxWithTextField(maxMutatedGenesNameLabel,maxMutatedGenesValueLabel,maxMutatedGenesTextField);
+        maxMutatedGenesBox = createHBoxWithTextField(maxMutatedGenesNameLabel,maxMutatedGenesTextField);
         genomeLengthTextField = createTextField();
-        genomeLengthBox = createHBoxWithTextField(genomeLengthNameLabel,genomeLengthValueLabel,genomeLengthTextField);
+        genomeLengthBox = createHBoxWithTextField(genomeLengthNameLabel,genomeLengthTextField);
     }
     private void setBoxes() {
         mapWidthBox = createHBox(mapWidthNameLabel,mapHeightValueLabel);
