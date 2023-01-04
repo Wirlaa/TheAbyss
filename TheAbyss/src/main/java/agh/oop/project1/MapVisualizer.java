@@ -71,13 +71,9 @@ public class MapVisualizer {
 
     private String drawObject(Vector2d currentPosition) {
         String result = null;
-        if (this.map.isOccupied(currentPosition)) {
-            Object object = this.map.animalsAt(currentPosition).isEmpty() ? this.map.plantAt(currentPosition) : this.map.animalsAt(currentPosition).toArray()[0];
-            if (object != null) {
-                result = object.toString();
-            } else {
-                result = EMPTY_CELL;
-            }
+        Object object = this.map.animalsAt(currentPosition).isEmpty() ? this.map.plantAt(currentPosition) : this.map.animalsAt(currentPosition).toArray()[0];
+        if (object != null) {
+            result = object.toString();
         } else {
             result = EMPTY_CELL;
         }

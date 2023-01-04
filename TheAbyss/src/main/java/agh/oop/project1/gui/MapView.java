@@ -74,7 +74,7 @@ public class MapView extends GridPane {
         for (Vector2d gridPosition: positionsGrid) {
             Vector2d realPosition = new Vector2d(gridPosition.x()-1,presenter.getMainPresenter().getMap().getUpperRightBound().y()-gridPosition.y()+1);
             VBox box = null;
-            if (presenter.getMainPresenter().getMap().isOccupied(realPosition)) {
+            if (!presenter.getMainPresenter().getMap().getAnimals().get(realPosition).isEmpty()) {
                 box = createVbox(createLabel(presenter.getMainPresenter().getMap().animalsAt(realPosition).iterator().next().toString()));
                 int energy = presenter.getMainPresenter().getMap().animalsAt(realPosition).iterator().next().getEnergy();
                 if (energy > 255) { energy = 255;}

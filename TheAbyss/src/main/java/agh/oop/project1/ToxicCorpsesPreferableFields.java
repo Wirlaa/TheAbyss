@@ -20,8 +20,10 @@ public class ToxicCorpsesPreferableFields implements IPreferableFields, IAnimalD
         deathCount.put(animal.getPosition(), deathCount.get(animal.getPosition())+1);
     }
     @Override
-    public List<Vector2d> betterFields() { // To może w przyszłości generować brzydkie rzeczy, trzebaby kiedyś napisać lepszą wersję
-        return new ArrayList<>( deathCount.entrySet()
+    public List<Vector2d> betterFields() {
+        List<Map.Entry<Vector2d, Integer>> fields = new ArrayList<>(deathCount.entrySet());
+        Collections.shuffle(fields);
+        return new ArrayList<>( fields
                 .stream()
                 .sorted(Collections.reverseOrder(comparingByValue()))
                 .limit(fieldsCount/5)
@@ -30,10 +32,12 @@ public class ToxicCorpsesPreferableFields implements IPreferableFields, IAnimalD
     }
     @Override
     public List<Vector2d> worseFields() {
-        return new ArrayList<>( deathCount.entrySet()
+        List<Map.Entry<Vector2d, Integer>> fields = new ArrayList<>(deathCount.entrySet());
+        Collections.shuffle(fields);
+        return new ArrayList<>( fields
                 .stream()
                 .sorted(comparingByValue())
-                .limit((fieldsCount/5)*4)
+                .limit(fieldsCount/5)
                 .map(x -> { return ((Vector2d)((Map.Entry<?, ?>) x).getKey()); })
                 .toList() );
     }

@@ -43,7 +43,7 @@ public class SimulationEngine implements IEngine {
             map.eatAndPlaceNewPlants();
             breedTheAnimals();
             try {
-                Thread.sleep(2000);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
