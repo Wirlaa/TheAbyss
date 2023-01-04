@@ -11,6 +11,7 @@ import javafx.scene.text.TextAlignment;
 
 public class LaunchView extends BorderPane {
     private LaunchPresenter presenter;
+    private Button startButton;
     public LaunchView() {
         buildView();
     }
@@ -27,7 +28,7 @@ public class LaunchView extends BorderPane {
         simulationParameters.setStyle("-fx-text-fill: #CCCCCC; -fx-font-size: 35; -fx-font-weight: bold");
 
         Label instructions = new Label(
-                "Enter simulation parameters or load a predefined configuration. " +
+                "Load a predefined configuration or enter simulation parameters and press setOptions to confirm. " +
                         "Then press start to run the simulation.");
         instructions.setStyle("-fx-text-fill: #CCCCCC; -fx-font-size: 15");
         instructions.setTextAlignment(TextAlignment.CENTER);
@@ -49,16 +50,21 @@ public class LaunchView extends BorderPane {
         setOptionsButton.setStyle("-fx-background-color: #990000; -fx-text-fill: #EEEEEE; -fx-font-weight: bold; -fx-font-size: 15");
         setOptionsButton.setOnAction(event -> presenter.initInputOptions());
 
-        Button startButton = new Button("Start");
+        startButton = new Button("Start");
         startButton.setPrefSize(120, 25);
         startButton.setStyle("-fx-background-color: #009900; -fx-text-fill: #EEEEEE; -fx-font-weight: bold; -fx-font-size: 15");
         startButton.setOnAction(event -> presenter.startSimulation());
+        showStartButton(false);
 
-        controlsHBox.getChildren().addAll(showLoadingOptions, setOptionsButton, startButton);
+        controlsHBox.getChildren().addAll(showLoadingOptions, setOptionsButton,startButton);
         topVBox.getChildren().addAll(simulationParameters,instructions,controlsHBox);
         setTop(topVBox);
     }
     public void setPresenter (LaunchPresenter presenter) {
         this.presenter = presenter;
+    }
+    public void showStartButton(boolean show) {
+        startButton.setVisible(show);
+        startButton.setManaged(show);
     }
 }

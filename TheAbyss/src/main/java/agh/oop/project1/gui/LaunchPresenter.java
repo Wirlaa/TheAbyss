@@ -28,6 +28,7 @@ public class LaunchPresenter {
     //fajnie byloby dodac wyjatek, kiedy jest za malo opcji
     public void showLoadOptions() {
         noInputFields = true;
+        showStartButton(false);
         mainPresenter.showLoadOptions();
     }
     public void initInputOptions() {
@@ -62,16 +63,29 @@ public class LaunchPresenter {
     public void startSimulation() {
         IWorldMap map = new HellishGateMap(mainPresenter.getOptions().mapWidth(), mainPresenter.getOptions().mapHeight(), mainPresenter.getOptions());
         IEngine engine = new SimulationEngine(map, mainPresenter.getOptions());
-        MapPresenter mapPresenter = new MapPresenter(new MapView(),mainPresenter);
+
+        MainPresenter newMainPresenter = new MainPresenter(new MainView());
+        newMainPresenter.setOptions(mainPresenter.getOptions());
+
+        OptionsPresenter optionsPresenter = new OptionsPresenter(new OptionsView(true), newMainPresenter);
+        newMainPresenter.setOptionsPresenter(optionsPresenter);
+
+        MapPresenter mapPresenter = new MapPresenter(new MapView(),newMainPresenter);
         engine.addObserver(mapPresenter);
-        mainPresenter.setMapPresenter(mapPresenter);
-        mainPresenter.setEngine(engine);
-        mainPresenter.setMap(map);
-        mainPresenter.createThread();
+        newMainPresenter.setMapPresenter(mapPresenter);
+
+        newMainPresenter.setEngine(engine);
+        newMainPresenter.setMap(map);
+        newMainPresenter.createThread();
+
         Stage stage = new Stage();
-        stage.setScene(new Scene(mainPresenter.getView()));
+        stage.setScene(new Scene(newMainPresenter.getView()));
         stage.setTitle("Simulation");
         stage.show();
+    }
+    //wzorzec obserwator moze?
+    public void showStartButton(boolean show) {
+        view.showStartButton(show);
     }
 }
 

@@ -5,6 +5,8 @@ import agh.oop.project1.IWorldMap;
 import agh.oop.project1.SimulationOptions;
 import javafx.application.Platform;
 
+import java.util.concurrent.CountDownLatch;
+
 public class MainPresenter {
     private IWorldMap map;
     private IEngine engine;
@@ -35,6 +37,9 @@ public class MainPresenter {
         options = new SimulationOptions(intOptions[0], intOptions[1], corpseToxicity, intOptions[2], intOptions[3], intOptions[4],
                 intOptions[5], intOptions[6], intOptions[7], intOptions[8], intOptions[9], intOptions[10], intOptions[11]);
     }
+    public void setOptions(SimulationOptions options) {
+        this.options = options;
+    }
     public SimulationOptions getOptions() { return options; }
     public void updateView() {
         view.setContentCenter(mapPresenter.getView());
@@ -46,18 +51,23 @@ public class MainPresenter {
     public void resume() {
         engineThread.resume();
         //engineThread.run();
-        /*synchronized (engineThread) {
-            engineThread.notify();
-        }*/
+        //synchronized (engineThread) {
+        //    engineThread.notify();
+        //}
+        //engine.resume();
     }
     public void pause() {
+        //engine.await();
         //engine.pause();
         //engineThread.interrupt();
         engineThread.suspend();
     }
     // z jakiegos powodu wylacza widok na opcje w launch view
     public void switchOptions() {
+        optionsPresenter.getView().allowInput(false);
+        optionsPresenter.refreshView();
         if (!showOptions) {
+
             view.setContentRight(optionsPresenter.getView());
             showOptions = true;
         } else {
@@ -69,8 +79,11 @@ public class MainPresenter {
         Platform.runLater(() -> {
             optionsPresenter.getView().allowInput(allowInput);
             optionsPresenter.refreshView();
-            launchPresenter.getView().setCenter(optionsPresenter.getView());
-            launchPresenter.getView().getScene().getWindow().sizeToScene();
+            if (launchPresenter != null) {
+                launchPresenter.showStartButton(!allowInput);
+                launchPresenter.getView().setCenter(optionsPresenter.getView());
+                launchPresenter.getView().getScene().getWindow().sizeToScene();
+            }
         });
     }
     public void showLoadOptions() {
@@ -83,10 +96,13 @@ public class MainPresenter {
     public String getInput() { return optionsPresenter.getInput(); }
     public boolean getCorpseToxicityState() { return optionsPresenter.getView().corpseToxicityCheckBoxState(); }
 
+    // taki scuffed to do:
     // jakis inny sposob wywalania bledow?
     // wywalenie cssa do osobnej klasy
-
     // binding?
-
-    //getView().getScene().setRoot(mainPresenter.getView());
+    // getView().getScene().setRoot(mainPresenter.getView());
+    // pattern observator do wszystkich switch/toogle
+    // osobne klasy na wielkie widoki (np options)
+    // oddzielenie maina od launchera
+    // znalezc sposob na poprawnie stopowanie watkow
 }

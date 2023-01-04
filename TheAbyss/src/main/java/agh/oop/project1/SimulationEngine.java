@@ -25,11 +25,13 @@ public class SimulationEngine implements IEngine {
             map.placeAnimal(animal);
         }
     }
-    public synchronized void pause() {
-        try {
-            wait();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+    public void pause() {
+        synchronized (this) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     public void run() {
@@ -46,10 +48,24 @@ public class SimulationEngine implements IEngine {
                 throw new RuntimeException(e);
             }
             simulationChanged();
-            System.out.println(mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
+            System.out.println(mapVisualizer.draw(new Vector2d(0, 0), map.getUpperRightBound()));
             map.stepDateUp();
         }
     }
+    /*public void resume() {
+        synchronized (Thread.currentThread()) {
+            Thread.currentThread().notify();
+        }
+    }
+    public void await() {
+        synchronized (Thread.currentThread()) {
+            try {
+                Thread.currentThread().wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }*/
     private void breedTheAnimals() {
         for (Vector2d j : animals.keySet()) {
             Object[] animalsToBreed = Utils.fightForYourDeath(animals.get(j)
