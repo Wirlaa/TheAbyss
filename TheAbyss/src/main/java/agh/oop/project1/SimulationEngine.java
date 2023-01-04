@@ -79,7 +79,9 @@ public class SimulationEngine implements IEngine {
 
     }
     public void run() {
-        makeFile();
+        if(simulationOptions.savingStatistics()) {
+            makeFile();
+        }
         MapVisualizer mapVisualizer = new MapVisualizer(map);
         //System.out.println( mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
         simulationChanged();
