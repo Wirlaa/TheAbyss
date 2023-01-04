@@ -9,7 +9,6 @@ public enum MapDirection {
     SOUTHWEST,
     WEST,
     NORTHWEST;
-
     @Override
     public String toString(){
         return switch(this){
@@ -23,14 +22,12 @@ public enum MapDirection {
             case NORTHWEST -> "NW";
         };
     }
-
     public MapDirection rotate(int arg){
         if((arg < 0) ||(arg > 7)){
             throw new IllegalArgumentException("Rotation value out of bounds");
         }
         return MapDirection.values()[(this.ordinal() + arg) % 8];
     }
-
     public Vector2d toUnitVector(){
         return switch(this){
             case NORTH -> new Vector2d(0,1);

@@ -3,12 +3,10 @@ package agh.oop.project1;
 import java.util.*;
 
 public class HellishGateMap extends AWorldMap{
-    protected Map<Vector2d, Plant> plants = new HashMap<>();
     IPreferableFields preferableFields;
     private static final Vector2d LOWER_BOUND = new Vector2d(0,0);
     private static Vector2d upper_bound;
     List<IAnimalDeathObserver> animalDeathObserverList = new ArrayList<>();
-
     public HellishGateMap(int width, int height, SimulationOptions simulationOptions){
         Random rng = new Random();
         upper_bound = new Vector2d(width-1, height-1);
@@ -21,7 +19,6 @@ public class HellishGateMap extends AWorldMap{
         }
         placeNPlants(simulationOptions.initialPlantCount());
     }
-
     private void placeNPlants(int n) {
         Random rng = new Random();
         List<Vector2d> betterFields = preferableFields.betterFields();
@@ -33,11 +30,9 @@ public class HellishGateMap extends AWorldMap{
                 if (placeFromFirstElsePlaceFromSecond(betterFields, worseFields)) break;
             } else {
                 if (placeFromFirstElsePlaceFromSecond(worseFields, betterFields)) break;
-
             }
         }
     }
-
     private boolean placeFromFirstElsePlaceFromSecond(List<Vector2d> first, List<Vector2d> second) {
         boolean found = false;
         for (Vector2d vector2d : first) {
@@ -60,7 +55,6 @@ public class HellishGateMap extends AWorldMap{
         }
         return false;
     }
-
     @Override
     public boolean isInBounds(Vector2d dest) {
         return LOWER_BOUND.precedes(dest) && upper_bound.follows(dest);
@@ -71,7 +65,6 @@ public class HellishGateMap extends AWorldMap{
         notifyAnimalDeathObservers(animal);
         return animals.remove(animal.getPosition(), animal);
     }
-
     @Override
     public void eatAndPlaceNewPlants() {
         for (Vector2d pos : animals.keySet()) {
@@ -85,33 +78,27 @@ public class HellishGateMap extends AWorldMap{
         }
         placeNPlants(simulationOptions.plantsGrowingEachDay());
     }
-
     @Override
     public Collection<Animal> animalsAt(Vector2d position) {
         return animals.get(position);
     }
-
     @Override
     public Plant plantAt(Vector2d position) {
         return plants.get(position);
     }
-
     @Override
     public Vector2d getNewPosition(Vector2d position, MapDirection orientation) {
         Random rng = new Random();
         return new Vector2d(rng.nextInt(LOWER_BOUND.x(), upper_bound.x()), rng.nextInt(LOWER_BOUND.y(), upper_bound.y()));
     }
-
     @Override
     public MapDirection getNewOrientation(Vector2d position, MapDirection orientation) {
         return orientation;
     }
-
     @Override
     public Vector2d getUpperRightBound() {
         return upper_bound;
     }
-
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition, Animal animalToRemove){
         animals.remove(oldPosition, animalToRemove);
@@ -124,14 +111,13 @@ public class HellishGateMap extends AWorldMap{
         }
         animalToRemove.subtractEnergy(simulationOptions.reproductionCost());
     }
-
     private void notifyAnimalDeathObservers(Animal animal){
         for (IAnimalDeathObserver i :
                 animalDeathObserverList) {
             i.animalDied(animal);
         }
     }
-
+    // huh? czemu sa dwie funkcje upperbound?
     public static Vector2d getUpper_bound() {
         return upper_bound;
     }

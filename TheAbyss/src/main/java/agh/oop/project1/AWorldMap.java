@@ -2,13 +2,19 @@ package agh.oop.project1;
 
 import com.google.common.collect.*;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class AWorldMap implements IWorldMap, IPositionChangeObserver{
     protected Multimap<Vector2d, Animal> animals = HashMultimap.create();
+    protected Map<Vector2d, Plant> plants = new HashMap<>();
     protected int date = 0;
-
-
     SimulationOptions simulationOptions;
-
+    @Override
+    public Multimap<Vector2d, Animal> getAnimals() { return ImmutableMultimap.copyOf(animals); }
+    @Override
+    public Map<Vector2d, Plant> getPlants() { return Collections.unmodifiableMap(plants); }
     @Override
     public boolean placeAnimal(Animal animal){
         if(!isInBounds(animal.getPosition())) {
@@ -17,16 +23,13 @@ public abstract class AWorldMap implements IWorldMap, IPositionChangeObserver{
         animals.put(animal.getPosition(), animal);
         return true;
     }
-
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition, Animal animalToRemove){
         animals.remove(oldPosition, animalToRemove);
         animals.put(newPosition, animalToRemove);
     }
-
     public SimulationOptions getSimulationOptions() {
         return simulationOptions;
     }
-
     public int getDate() {
         return date;
     }

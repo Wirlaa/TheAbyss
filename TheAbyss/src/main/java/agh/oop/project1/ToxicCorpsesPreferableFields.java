@@ -6,9 +6,7 @@ import static java.util.Map.Entry.comparingByValue;
 
 public class ToxicCorpsesPreferableFields implements IPreferableFields, IAnimalDeathObserver{
     HashMap<Vector2d, Integer> deathCount = new HashMap<>();
-
     private int fieldsCount;
-
     public ToxicCorpsesPreferableFields(int width, int height){
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -17,29 +15,26 @@ public class ToxicCorpsesPreferableFields implements IPreferableFields, IAnimalD
         }
         fieldsCount = width * height;
     }
-
     @Override
     public void animalDied(Animal animal) {
         deathCount.put(animal.getPosition(), deathCount.get(animal.getPosition())+1);
     }
-
     @Override
     public List<Vector2d> betterFields() { // To może w przyszłości generować brzydkie rzeczy, trzebaby kiedyś napisać lepszą wersję
         return new ArrayList<>( deathCount.entrySet()
                 .stream()
                 .sorted(Collections.reverseOrder(comparingByValue()))
                 .limit(fieldsCount/5)
-                .map(x -> { return ((Vector2d)((Map.Entry<?, ?>) x).getKey()) ;})
+                .map(x -> { return ((Vector2d)((Map.Entry<?, ?>) x).getKey()); })
                 .toList() );
     }
-
     @Override
     public List<Vector2d> worseFields() {
         return new ArrayList<>( deathCount.entrySet()
                 .stream()
                 .sorted(comparingByValue())
                 .limit((fieldsCount/5)*4)
-                .map(x -> { return ((Vector2d)((Map.Entry<?, ?>) x).getKey()) ;})
+                .map(x -> { return ((Vector2d)((Map.Entry<?, ?>) x).getKey()); })
                 .toList() );
     }
 }

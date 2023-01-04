@@ -1,12 +1,13 @@
 package agh.oop.project1;
 
+import com.google.common.collect.Multimap;
+
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * The interface responsible for interacting with the map of the world.
  * Assumes that Vector2d and MoveDirection classes are defined.
- *
- * @author apohllo
  *
  */
 public interface IWorldMap {
@@ -18,7 +19,6 @@ public interface IWorldMap {
      * @return True if the object can move to that position.
      */
     boolean isInBounds(Vector2d position);
-
     /**
      * Place a animal on the map.
      *
@@ -28,7 +28,6 @@ public interface IWorldMap {
      */
     boolean placeAnimal(Animal animal);
     boolean killAnimal(Animal animal);
-
     /**
      * Return true if given position on the map is occupied. Should not be
      * confused with canMove since there might be empty positions where the animal
@@ -38,12 +37,11 @@ public interface IWorldMap {
      *            Position to check.
      * @return True if the position is occupied.
      */
+    //potrzebuje, zeby sprawdzalo tylko zwierzeta
     default boolean isOccupied(Vector2d position){
-        return (!animalsAt(position).isEmpty()) || (plantAt(position) != null);
+        return (!animalsAt(position).isEmpty());// || (plantAt(position) != null);
     }
-
     void eatAndPlaceNewPlants();
-
     /**
      * Return an object at a given position.
      *
@@ -55,9 +53,13 @@ public interface IWorldMap {
     Plant plantAt(Vector2d position);
     Vector2d getNewPosition(Vector2d position, MapDirection orientation);
     MapDirection getNewOrientation(Vector2d position, MapDirection orientation);
-    public SimulationOptions getSimulationOptions();
-    public int getDate();
-
-    public Vector2d getUpperRightBound();
+    SimulationOptions getSimulationOptions();
+    int getDate();
+    Vector2d getUpperRightBound();
     void stepDateUp();
+    //map getters not used in the end
+    Multimap<Vector2d, Animal> getAnimals();
+    Map<Vector2d, Plant> getPlants();
+
+
 }

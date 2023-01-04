@@ -6,17 +6,13 @@ import java.util.List;
 import java.util.Random;
 
 public class Genotype {
-
     private List<Integer> genes;
     private int activeGene;
-
-
     public Genotype(List<Integer> genes){
         Random rng = new Random();
         this.genes = genes;
         this.activeGene = rng.nextInt() % genes.size();
     }
-
     public Genotype(int geneCount){
         Random rng = new Random();
         genes = new ArrayList<>();
@@ -25,7 +21,6 @@ public class Genotype {
         }
         this.activeGene = rng.nextInt(0,genes.size());
     }
-
     public Genotype(Animal animal1, Animal animal2) {
         Random rng = new Random();
         genes = new ArrayList<>();
@@ -42,7 +37,6 @@ public class Genotype {
             genes.addAll(animal1.getGenes().getGenes().subList(genesFrom2, animal1.getGenes().size()));
         }
     }
-
     public void mutateGenes(int minMutatedGenes, int maxMutatedGenes) {
         Random rng = new Random();
         int mutatedGeneCount = rng.nextInt(minMutatedGenes, maxMutatedGenes + 1);
@@ -55,12 +49,9 @@ public class Genotype {
             genes.set(potentialGenesToMutate.get(i), rng.nextInt(0,8));
         }
     }
-
-
     public int size(){
         return genes.size();
     }
-
     public int getNext() {
         activeGene = (activeGene + 1) % genes.size();
         return genes.get(activeGene);
@@ -68,5 +59,4 @@ public class Genotype {
     public List<Integer> getGenes() {
         return genes;
     }
-
 }

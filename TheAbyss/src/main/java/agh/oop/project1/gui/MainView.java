@@ -5,7 +5,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
@@ -22,22 +21,22 @@ public class MainView extends BorderPane {
         hbox.setSpacing(15);
         hbox.setAlignment(Pos.CENTER_LEFT);
 
-        Button buttonStart = new Button("Start");
-        buttonStart.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
-        buttonStart.setStyle("-fx-background-color: #006699; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
-        buttonStart.setOnAction(event -> presenter.start());
+        Button pauseButton = new Button("Pause");
+        pauseButton.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
+        pauseButton.setStyle("-fx-background-color: #990000; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
+        pauseButton.setOnAction(event -> presenter.pause());
 
-        Button buttonStop = new Button("Stop");
-        buttonStop.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
-        buttonStop.setStyle("-fx-background-color: #990000; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
-        buttonStop.setOnAction(event -> presenter.stop());
+        Button resumeButton = new Button("Resume");
+        resumeButton.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
+        resumeButton.setStyle("-fx-background-color: #006699; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
+        resumeButton.setOnAction(event -> presenter.resume());
 
-        Button buttonOptions = new Button("Options");
-        buttonOptions.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
-        buttonOptions.setStyle("-fx-background-color: #998800; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
-        buttonOptions.setOnAction(event -> presenter.switchOptions());
+        Button optionsButton = new Button("Options");
+        optionsButton.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
+        optionsButton.setStyle("-fx-background-color: #998800; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
+        optionsButton.setOnAction(event -> presenter.switchOptions());
 
-        hbox.getChildren().addAll(buttonStart, buttonStop, buttonOptions);
+        hbox.getChildren().addAll(pauseButton, resumeButton, optionsButton);
         setTop(hbox);
     }
     public void setPresenter (MainPresenter presenter) {

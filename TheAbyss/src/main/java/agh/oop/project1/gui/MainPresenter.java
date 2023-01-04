@@ -26,25 +26,36 @@ public class MainPresenter {
     public LaunchView getStartView(){ return launchPresenter.getView(); }
     public void setMapPresenter(MapPresenter mapPresenter) { this.mapPresenter = mapPresenter; }
     public void setEngine(IEngine engine) { this.engine = engine; }
+    //public IEngine getEngine() { return engine; }
     public void setOptionsPresenter(OptionsPresenter optionsPresenter) { this.optionsPresenter = optionsPresenter; }
     public void setStartPresenter(LaunchPresenter launchPresenter) { this.launchPresenter = launchPresenter; }
     public void setLoadOptionsPresenter(LoadOptionsPresenter loadOptionsPresenter) { this.loadOptionsPresenter = loadOptionsPresenter; }
     //na pewno da sie ladniej
     public void setOptions(int[] intOptions, boolean corpseToxicity) {
-        options = new SimulationOptions(intOptions[0], intOptions[1], corpseToxicity, intOptions[2], intOptions[3],intOptions[4],intOptions[5],intOptions[6],
-                intOptions[7],intOptions[8],intOptions[9],intOptions[10],intOptions[11]);
+        options = new SimulationOptions(intOptions[0], intOptions[1], corpseToxicity, intOptions[2], intOptions[3], intOptions[4],
+                intOptions[5], intOptions[6], intOptions[7], intOptions[8], intOptions[9], intOptions[10], intOptions[11]);
     }
     public SimulationOptions getOptions() { return options; }
     public void updateView() {
         view.setContentCenter(mapPresenter.getView());
     }
-    public void start() {
+    public void createThread() {
         engineThread = new Thread(engine);
         engineThread.start();
     }
-    public void stop() {
-        engineThread.stop();
+    public void resume() {
+        engineThread.resume();
+        //engineThread.run();
+        /*synchronized (engineThread) {
+            engineThread.notify();
+        }*/
     }
+    public void pause() {
+        //engine.pause();
+        //engineThread.interrupt();
+        engineThread.suspend();
+    }
+    // z jakiegos powodu wylacza widok na opcje w launch view
     public void switchOptions() {
         if (!showOptions) {
             view.setContentRight(optionsPresenter.getView());

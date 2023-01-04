@@ -4,11 +4,8 @@ import agh.oop.project1.HellishGateMap;
 import agh.oop.project1.IEngine;
 import agh.oop.project1.IWorldMap;
 import agh.oop.project1.SimulationEngine;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
@@ -43,7 +40,7 @@ public class LaunchPresenter {
             int[] intOptions = new int[12]; //cos jest nie tak z dlugoscia tablicy?
             boolean corpseToxicity = mainPresenter.getCorpseToxicityState();
             for (int i = 0; i < stringOptions.length; i++) {
-                if (isInteger(stringOptions[i], 10)) {
+                if (isNumber(stringOptions[i])) {
                     intOptions[i] = parseInt(stringOptions[i]);
                 } else throw new IllegalArgumentException(stringOptions[i] + " is not a legal simulation option");
             }
@@ -51,11 +48,16 @@ public class LaunchPresenter {
             mainPresenter.showOptions(false);
         }
     }
-    private static boolean isInteger(String s, int radix) {
-        Scanner sc = new Scanner(s.trim());
-        if(!sc.hasNextInt(radix)) return false;
-        sc.nextInt(radix);
-        return !sc.hasNext();
+    public static boolean isNumber(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            int d = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
     public void startSimulation() {
         IWorldMap map = new HellishGateMap(mainPresenter.getOptions().mapWidth(), mainPresenter.getOptions().mapHeight(), mainPresenter.getOptions());
@@ -65,7 +67,7 @@ public class LaunchPresenter {
         mainPresenter.setMapPresenter(mapPresenter);
         mainPresenter.setEngine(engine);
         mainPresenter.setMap(map);
-        mainPresenter.start();
+        mainPresenter.createThread();
         Stage stage = new Stage();
         stage.setScene(new Scene(mainPresenter.getView()));
         stage.setTitle("Simulation");

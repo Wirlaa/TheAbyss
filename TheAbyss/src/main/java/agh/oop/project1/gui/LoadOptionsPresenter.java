@@ -28,11 +28,12 @@ public class LoadOptionsPresenter {
                 stringOptions.add(scanner.nextLine());
             }*/
             String[] stringOptions = scanner.nextLine().split(" ");
-            int[] intOptions = new int[13]; //cos jest nie tak z wielkoscia?
+            int[] intOptions = new int[12]; //cos jest nie tak z wielkoscia?
             boolean corpseToxicity = false; //niebezpieczna inicjalizacja
-            for (int i = 0; i < stringOptions.length; i++) {
-                if (isInteger(stringOptions[i],10)) {
-                    intOptions[i] = parseInt(stringOptions[i]);
+            for (int i = 0, j = 0; i < stringOptions.length; i++) {
+                if (isNumber(stringOptions[i])) {
+                    intOptions[j] = parseInt(stringOptions[i]);
+                    j++;
                 } else if (stringOptions[i].equals("false") || stringOptions[i].equals("true")) {
                     corpseToxicity = parseBoolean(stringOptions[i]);
                 }
@@ -46,11 +47,16 @@ public class LoadOptionsPresenter {
             exception.printStackTrace();
         }
     }
-    private static boolean isInteger(String s, int radix) {
-        Scanner sc = new Scanner(s.trim());
-        if(!sc.hasNextInt(radix)) return false;
-        sc.nextInt(radix);
-        return !sc.hasNext();
+    public static boolean isNumber(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
     public void refreshView() {
         view.buildView();

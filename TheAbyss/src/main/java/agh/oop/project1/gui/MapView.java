@@ -1,15 +1,21 @@
 package agh.oop.project1.gui;
 
+import agh.oop.project1.Vector2d;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MapView extends GridPane {
-    static final int WIDTH = 10;
-    static final int HEIGHT = 10;
+    static final int WIDTH = 15;
+    static final int HEIGHT = 15;
+    private Node[][] vboxArray;
     private MapPresenter presenter;
     public MapView() {
         setAlignment(Pos.CENTER);
@@ -23,7 +29,7 @@ public class MapView extends GridPane {
         Platform.runLater(() -> {
             getChildren().clear();
             mapLayout();
-            //placeElements();
+            placeElements();
         });
     }
     public void setPresenter (MapPresenter presenter) {
@@ -32,6 +38,7 @@ public class MapView extends GridPane {
     private void mapLayout() {
         int numOfColumns = presenter.getMainPresenter().getMap().getUpperRightBound().x();
         int numOfRows = presenter.getMainPresenter().getMap().getUpperRightBound().y();
+        //vboxArray = new Node[numOfColumns+2][numOfRows+2]; //za mala tablica?
 
         add(createVbox(createLabel("y\\x")),0,0);
 
@@ -41,24 +48,57 @@ public class MapView extends GridPane {
         for (int i = 0; i < numOfRows + 1; i++) {
             add(createVbox(createLabel(Integer.toString(numOfRows - i))),0,i+1);
         }
-        for (int i = 0; i < numOfColumns + 1; i++) {
-            for (int j = 0; j < numOfRows + 1; j++) {
-                add(createVbox(createLabel("")),i+1,j+1);
+        for (int i = 1; i < numOfColumns + 2; i++) {
+            for (int j = 1; j < numOfRows + 2; j++) {
+                VBox box = createVbox(createLabel(""));
+                add(box,i,j);
+                //vboxArray[i][j] = box;
             }
         }
     }
-    /*private void placeElements(){
-        for (Vector2d position: map.getElements().keySet()) {
-            IMapElement element = map.objectAt(position);
-            add(new GuiElementBox(element, element.getMapLabel()).getField(),
-                    -map.getLowerBound().getX() + 1 + position.getX(),
-                    map.getUpperBound().getY() + 1 - position.getY());
+    private void placeElements(){
+        //List<Vector2d> animalPositions = presenter.getMainPresenter().getMap().getAnimals().keys().stream().toList();
+        //List<Vector2d> animalPositions = presenter.getMainPresenter().getMap().getAnimals().keys().stream().toList();
+        List<Vector2d> positionsGrid = new ArrayList<>();
+        for (int i = 1; i < presenter.getMainPresenter().getMap().getUpperRightBound().x() + 2; i++) {
+            for (int j = 1; j < presenter.getMainPresenter().getMap().getUpperRightBound().y() + 2; j++) {
+                positionsGrid.add(new Vector2d(i,j));
+            }
         }
-    }*/
+        /*
+        Object object = this.map.animalsAt(currentPosition).isEmpty() ? this.map.plantAt(currentPosition) : this.map.animalsAt(currentPosition).toArray()[0];
+            if (object != null) {
+                result = object.toString();
+            }
+         */
+        for (Vector2d gridPosition: positionsGrid) {
+            Vector2d realPosition = new Vector2d(gridPosition.x()-1,presenter.getMainPresenter().getMap().getUpperRightBound().y()-gridPosition.y()+1);
+            VBox box = null;
+            if (presenter.getMainPresenter().getMap().isOccupied(realPosition)) {
+                box = createVbox(createLabel(presenter.getMainPresenter().getMap().animalsAt(realPosition).iterator().next().toString()));
+                int energy = presenter.getMainPresenter().getMap().animalsAt(realPosition).iterator().next().getEnergy();
+                if (energy > 255) { energy = 255;}
+                box.setStyle(String.format("-fx-background-color: #%s0000",String.format("%1$02X", energy)));
+            } else if (presenter.getMainPresenter().getMap().plantAt(realPosition) != null) {
+                //box = createVbox(createLabel(presenter.getMainPresenter().getMap().plantAt(realPosition).toString()));
+                box = createVbox(createLabel(" "));
+                box.setStyle("-fx-background-color: #119900");
+            }
+            if (box != null) {
+                add(box, gridPosition.x(), gridPosition.y());
+            }
+            //vboxArray[position.x()-1][position.y()-1-presenter.getMainPresenter().getMap().getUpperRightBound().y()] = box;
+            /*add(new GuiElementBox(element, element.getMapLabel()).getField(),
+                    -map.getLowerBound().getX() + 1 + position.getX(),
+                    map.getUpperBound().getY() + 1 - position.getY());*/
+        }
+    }
     private VBox createVbox(Label label) {
         VBox vbox = new VBox(label);
         vbox.setAlignment(Pos.CENTER);
-        vbox.setMinSize(WIDTH,HEIGHT);
+        vbox.setPrefSize(WIDTH,HEIGHT);
+        vbox.setMaxHeight(HEIGHT);
+        vbox.setMinHeight(HEIGHT);
         vbox.setStyle("-fx-background-color: #EEEEEE");
         GridPane.setHalignment(label, HPos.CENTER);
         return vbox;

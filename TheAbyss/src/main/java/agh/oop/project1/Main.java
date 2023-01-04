@@ -4,19 +4,11 @@ import agh.oop.project1.gui.App;
 import javafx.application.Application;
 
 public class Main {
-    public static void main(String[] args) {;
+    public static void main(String[] args) {
         try {
             Application.launch(App.class, args);
         } catch (IllegalArgumentException exception) {
             exception.printStackTrace();
         }
-        /*
-        try {
-            engine.run();
-        } catch (InterruptedException e) {
-            System.out.println("Engine interruption occured");
-            return;
-        }
-         */
     }
 }
