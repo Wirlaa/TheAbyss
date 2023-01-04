@@ -30,7 +30,7 @@ public class LoadOptionsPresenter {
             String[] stringOptions = scanner.nextLine().split(" ");
             int[] intOptions = new int[12]; //cos jest nie tak z wielkoscia?
             boolean corpseToxicity = false; //niebezpieczna inicjalizacja
-            for (int i = 0, j = 0; i < stringOptions.length; i++) {
+            for (int i = 0, j = 0; i < stringOptions.length - 1; i++) {
                 if (isNumber(stringOptions[i])) {
                     intOptions[j] = parseInt(stringOptions[i]);
                     j++;
@@ -39,7 +39,8 @@ public class LoadOptionsPresenter {
                 }
                 else throw new IllegalArgumentException(stringOptions[i] + " is not a legal simulation option");
             }
-            launchPresenter.setOptions(intOptions,corpseToxicity);
+            boolean saveStats = parseBoolean(stringOptions[stringOptions.length-1]);
+            launchPresenter.setOptions(intOptions,corpseToxicity,saveStats);
             launchPresenter.showOptions(false);
         }
         catch (

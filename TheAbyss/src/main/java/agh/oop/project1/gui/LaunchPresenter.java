@@ -52,20 +52,21 @@ public class LaunchPresenter {
             String[] stringOptions = optionsPresenter.getInput().split(" ");
             int[] intOptions = new int[12]; //cos jest nie tak z dlugoscia tablicy?
             boolean corpseToxicity = optionsPresenter.getView().corpseToxicityCheckBoxState();
+            boolean saveStats = optionsPresenter.getView().saveStatsBoxState();
             for (int i = 0; i < stringOptions.length; i++) {
                 if (isNumber(stringOptions[i])) {
                     intOptions[i] = parseInt(stringOptions[i]);
                 } else throw new IllegalArgumentException(stringOptions[i] + " is not a legal simulation option");
             }
-            setOptions(intOptions, corpseToxicity);
+            setOptions(intOptions, corpseToxicity, saveStats);
             showOptions(false);
         }
     }
     //na pewno da sie ladniej
     public SimulationOptions getOptions() { return options; }
-    public void setOptions(int[] intOptions, boolean corpseToxicity) {
+    public void setOptions(int[] intOptions, boolean corpseToxicity, boolean saveStats) {
         options = new SimulationOptions(intOptions[0], intOptions[1], corpseToxicity, intOptions[2], intOptions[3], intOptions[4],
-                intOptions[5], intOptions[6], intOptions[7], intOptions[8], intOptions[9], intOptions[10], intOptions[11], true);
+                intOptions[5], intOptions[6], intOptions[7], intOptions[8], intOptions[9], intOptions[10], intOptions[11], saveStats);
     }
     public static boolean isNumber(String strNum) {
         if (strNum == null) {

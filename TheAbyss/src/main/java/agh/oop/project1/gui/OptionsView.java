@@ -25,6 +25,7 @@ public class OptionsView extends VBox {
     private final String minMutatedGenesString = "Min num of mutations";
     private final String maxMutatedGenesString = "Max num of mutations";
     private final String genomeLengthString = "Genome length";
+    private final String saveStatsString = "Toggle statistics saving";
     private final Label mapWidthNameLabel = createNameLabel(mapWidthString);
     private final Label mapHeightNameLabel = createNameLabel(mapHeightString);
     private final Label corpseToxicityNameLabel = createNameLabel(corpseToxicityString);
@@ -38,6 +39,7 @@ public class OptionsView extends VBox {
     private final Label minMutatedGenesNameLabel = createNameLabel(minMutatedGenesString);
     private final Label maxMutatedGenesNameLabel = createNameLabel(maxMutatedGenesString);
     private final Label genomeLengthNameLabel = createNameLabel(genomeLengthString);
+    private final Label saveStatsNameLabel = createNameLabel(saveStatsString);
     private Label mapWidthValueLabel;
     private Label mapHeightValueLabel;
     private Label corpseToxicityValueLabel;
@@ -51,6 +53,7 @@ public class OptionsView extends VBox {
     private Label minMutatedGenesValueLabel;
     private Label maxMutatedGenesValueLabel;
     private Label genomeLengthValueLabel;
+    private Label saveStatsValueLabel;
     private TextField mapWidthTextField;
     private TextField mapHeightTextField;
     private CheckBox corpseToxicityCheckBox;
@@ -64,6 +67,7 @@ public class OptionsView extends VBox {
     private TextField minMutatedGenesTextField;
     private TextField maxMutatedGenesTextField;
     private TextField genomeLengthTextField;
+    private CheckBox saveStatsCheckBox;
     private HBox mapWidthBox;
     private HBox mapHeightBox;
     private HBox corpseToxicityBox;
@@ -77,6 +81,7 @@ public class OptionsView extends VBox {
     private HBox minMutatedGenesBox;
     private HBox maxMutatedGenesBox;
     private HBox genomeLengthBox;
+    private HBox saveStatsBox;
     private boolean allowInput;
     private OptionsPresenter presenter;
     public OptionsView(boolean allowInput) {
@@ -103,7 +108,7 @@ public class OptionsView extends VBox {
         getChildren().clear();
         getChildren().addAll(mapHeightBox,mapWidthBox,corpseToxicityBox,initialPlantCountBox,initialAnimalCountBox,
                 plantsGrowingEachDayBox,startingEnergyBox,energyFromOnePlantBox,energyToReproduceBox,
-                reproductionCostBox,minMutatedGenesBox,maxMutatedGenesBox,genomeLengthBox);
+                reproductionCostBox,minMutatedGenesBox,maxMutatedGenesBox,genomeLengthBox,saveStatsBox);
     }
     public void setPresenter (OptionsPresenter presenter) {
         this.presenter = presenter;
@@ -141,6 +146,9 @@ public class OptionsView extends VBox {
     }
     public boolean corpseToxicityCheckBoxState() {
         return corpseToxicityCheckBox.isSelected();
+    }
+    public boolean saveStatsBoxState() {
+        return saveStatsCheckBox.isSelected();
     }
     private TextField createTextField() {
         TextField text = new TextField();
@@ -199,6 +207,7 @@ public class OptionsView extends VBox {
         minMutatedGenesValueLabel = createValueLabel(Integer.toString(options.minMutatedGenes()));
         maxMutatedGenesValueLabel = createValueLabel(Integer.toString(options.maxMutatedGenes()));
         genomeLengthValueLabel = createValueLabel(Integer.toString(options.genomeLength()));
+        saveStatsValueLabel = createValueLabel(Boolean.toString(options.savingStatistics()));
     }
     private void setBoxesWithTextFields() {
         mapWidthTextField = createTextField();
@@ -229,6 +238,10 @@ public class OptionsView extends VBox {
         maxMutatedGenesBox = createHBoxWithTextField(maxMutatedGenesNameLabel,maxMutatedGenesTextField);
         genomeLengthTextField = createTextField();
         genomeLengthBox = createHBoxWithTextField(genomeLengthNameLabel,genomeLengthTextField);
+        saveStatsCheckBox = new CheckBox();
+        saveStatsCheckBox.setMinWidth(90);
+        saveStatsCheckBox.setPadding(new Insets(0, 35, 0, 35));
+        saveStatsBox = createHBoxWithTextField(saveStatsNameLabel, saveStatsCheckBox);
     }
     private void setBoxes() {
         mapWidthBox = createHBox(mapWidthNameLabel,mapHeightValueLabel);
@@ -244,6 +257,7 @@ public class OptionsView extends VBox {
         minMutatedGenesBox = createHBox(minMutatedGenesNameLabel,minMutatedGenesValueLabel);
         maxMutatedGenesBox = createHBox(maxMutatedGenesNameLabel,maxMutatedGenesValueLabel);
         genomeLengthBox = createHBox(genomeLengthNameLabel,genomeLengthValueLabel);
+        saveStatsBox = createHBox(saveStatsNameLabel,saveStatsValueLabel);
     }
     public void allowInput (boolean allowInput) {
         this.allowInput = allowInput;
