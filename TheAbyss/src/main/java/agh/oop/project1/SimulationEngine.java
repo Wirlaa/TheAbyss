@@ -8,13 +8,13 @@ import java.io.IOException;
 import java.util.*;
 
 public class SimulationEngine implements IEngine {
-    private SimulationStatistics simStats;
     UUID uuid = UUID.randomUUID();
     private final List<ISimulationChangeObserver> observers = new ArrayList<>();
     private final List<IAnimalObserver> animalObservers = new ArrayList<>();
     private SimulationOptions simulationOptions;
     private IPreferableFields preferableFields;
     private IWorldMap map;
+    private SimulationStatistics simStats;
     public Multimap<Vector2d, Animal> animals = HashMultimap.create();
     public Animal trackedAnimal = null;
     public SimulationEngine(IWorldMap map, SimulationOptions simulationOptions, SimulationStatistics simStats){
@@ -31,53 +31,6 @@ public class SimulationEngine implements IEngine {
         }
     }
     public void setTrackedAnimal(Animal trackedAnimal) { this.trackedAnimal = trackedAnimal; }
-    public void pause() {
-        synchronized (this) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-    private void appendToFile(){
-        try
-        {
-            FileWriter fw = new FileWriter("stats"+uuid.toString()+".csv",true);
-            fw.write("\n"+ map.getDate() + ", "
-                    + simStats.getAliveAnimalsCount() + ", "
-            + simStats.getPlantsOnMap() + ", "
-            + simStats.getFreeFields() + ", "
-            + simStats.getTheMostPopularGentype().toString().replace(",", " ") + ", "
-            + simStats.getAverageEnergy() + ", "
-            + simStats.getAverageAge());
-            fw.close();
-        }
-        catch(IOException ioe)
-        {
-            System.err.println("IOException: " + ioe.getMessage());
-        }
-    }
-
-    public void makeFile(){
-        try
-        {
-            FileWriter fw = new FileWriter("stats"+uuid.toString()+".csv",true);
-            fw.write("Date" + ", "
-                    + "Number of Animals" + ", "
-                    + "Number of plants" + ", "
-                    + "Number of free fields" + ", "
-                    + "The most popular genotype" + ", "
-                    + "Average Energy" + ", "
-                    + "Average Age");
-            fw.close();
-        }
-        catch(IOException ioe)
-        {
-            System.err.println("IOException: " + ioe.getMessage());
-        }
-
-    }
     public void run() {
         makeFile();
         MapVisualizer mapVisualizer = new MapVisualizer(map);
@@ -145,6 +98,12 @@ public class SimulationEngine implements IEngine {
             observer.simulationChanged();
         }
     }
+    private void animalChanged(Animal animal) {
+        for (IAnimalObserver i : animalObservers) {
+            i.animalChanged(animal);
+        }
+    }
+    public SimulationStatistics getSimStats() { return simStats; }
     private void updateStats(){
         int freeFields = 0;
         for (int i = 0; i < simulationOptions.mapWidth(); i++) {
@@ -186,9 +145,41 @@ public class SimulationEngine implements IEngine {
                         .size())
         );
     }
-    private void animalChanged(Animal animal) {
-        for (IAnimalObserver i : animalObservers) {
-            i.animalChanged(animal);
+    private void appendToFile(){
+        try
+        {
+            FileWriter fw = new FileWriter("stats"+uuid.toString()+".csv",true);
+            fw.write("\n"+ map.getDate() + ", "
+                    + simStats.getAliveAnimalsCount() + ", "
+                    + simStats.getPlantsOnMap() + ", "
+                    + simStats.getFreeFields() + ", "
+                    + simStats.getTheMostPopularGentype().toString().replace(",", " ") + ", "
+                    + simStats.getAverageEnergy() + ", "
+                    + simStats.getAverageAge());
+            fw.close();
         }
+        catch(IOException ioe)
+        {
+            System.err.println("IOException: " + ioe.getMessage());
+        }
+    }
+    public void makeFile(){
+        try
+        {
+            FileWriter fw = new FileWriter("stats"+uuid.toString()+".csv",true);
+            fw.write("Date" + ", "
+                    + "Number of Animals" + ", "
+                    + "Number of plants" + ", "
+                    + "Number of free fields" + ", "
+                    + "The most popular genotype" + ", "
+                    + "Average Energy" + ", "
+                    + "Average Age");
+            fw.close();
+        }
+        catch(IOException ioe)
+        {
+            System.err.println("IOException: " + ioe.getMessage());
+        }
+
     }
 }

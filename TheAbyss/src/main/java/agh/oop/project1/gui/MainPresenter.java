@@ -13,10 +13,12 @@ public class MainPresenter {
     private MapPresenter mapPresenter;
     private OptionsPresenter optionsPresenter;
     private AnimalTrackerPresenter animalTrackerPresenter;
+    private StatisticsPresenter statisticsPresenter;
     private SimulationOptions options;
     private Animal trackedAnimal = null;
-    private boolean showOptions = false;
-    private boolean showStatistics = false;
+    private boolean showingOptions = false;
+    private boolean showingTracking = false;
+    private boolean showingStatistics = false;
     public MainPresenter (MainView view) {
         this.view = view;
         this.view.setPresenter(this);
@@ -25,7 +27,8 @@ public class MainPresenter {
     public MainView getView(){ return view; }
     public void setMapPresenter(MapPresenter mapPresenter) { this.mapPresenter = mapPresenter; }
     public void setOptionsPresenter(OptionsPresenter optionsPresenter) { this.optionsPresenter = optionsPresenter; }
-    public void setStatisticsPresenter(AnimalTrackerPresenter animalTrackerPresenter) { this.animalTrackerPresenter = animalTrackerPresenter; }
+    public void setAnimalTrackerPresenter(AnimalTrackerPresenter animalTrackerPresenter) { this.animalTrackerPresenter = animalTrackerPresenter; }
+    public void setStatisticsPresenter(StatisticsPresenter statisticsPresenter) { this.statisticsPresenter = statisticsPresenter; }
     public SimulationOptions getOptions() { return options; }
     public void initSimulation(SimulationOptions options) {
         this.options = options;
@@ -47,7 +50,11 @@ public class MainPresenter {
 
         AnimalTrackerPresenter animalTrackerPresenter = new AnimalTrackerPresenter(new AnimalTrackerView(null),this);
         engine.addObserver(animalTrackerPresenter);
-        setStatisticsPresenter(animalTrackerPresenter);
+        setAnimalTrackerPresenter(animalTrackerPresenter);
+
+        StatisticsPresenter statisticsPresenter = new StatisticsPresenter(new StatisticsView(engine.getSimStats()),this);
+        engine.addObserver(statisticsPresenter);
+        setStatisticsPresenter(statisticsPresenter);
 
         Stage stage = new Stage();
         stage.setScene(new Scene(getView()));
@@ -81,21 +88,33 @@ public class MainPresenter {
     public void toggleOptions() {
         optionsPresenter.getView().allowInput(false);
         optionsPresenter.refreshView();
-        if (!showOptions) {
+        if (!showingOptions) {
             view.setContentRight(optionsPresenter.getView());
-            showOptions = true;
+            showingStatistics = false;
+            showingOptions = true;
         } else {
             view.setContentRight(null);
-            showOptions = false;
+            showingOptions = false;
         }
     }
     public void toggleAnimalTracking() {
-        if (!showStatistics) {
+        if (!showingTracking) {
             view.setContentLeft(animalTrackerPresenter.getView());
-            showStatistics = true;
+            showingTracking = true;
         } else {
             view.setContentLeft(null);
-            showStatistics = false;
+            showingTracking = false;
+        }
+    }
+    public void toggleStatistics() {
+        if (!showingStatistics) {
+            statisticsPresenter.getView().refreshView();
+            view.setContentRight(statisticsPresenter.getView());
+            showingStatistics = true;
+            showingOptions = false;
+        } else {
+            view.setContentRight(null);
+            showingStatistics = false;
         }
     }
     public void setTrackedAnimal(Animal trackedAnimal) { this.trackedAnimal = trackedAnimal; }
