@@ -3,6 +3,6 @@ package agh.oop.project1;
 public interface IEngine extends Runnable, IPositionChangeObserver, ISimulationChangeObserver {
     void run();
     void addObserver(ISimulationChangeObserver observer);
-    //void resume();
-    //void await();
+    void addObserver (IAnimalObserver observer);
+    void setTrackedAnimal(Animal trackedAnimal);
 }

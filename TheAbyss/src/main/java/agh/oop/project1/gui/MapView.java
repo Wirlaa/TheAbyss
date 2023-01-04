@@ -1,5 +1,6 @@
 package agh.oop.project1.gui;
 
+import agh.oop.project1.Animal;
 import agh.oop.project1.Vector2d;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
@@ -75,7 +76,9 @@ public class MapView extends GridPane {
             Vector2d realPosition = new Vector2d(gridPosition.x()-1,presenter.getMainPresenter().getMap().getUpperRightBound().y()-gridPosition.y()+1);
             VBox box = null;
             if (!presenter.getMainPresenter().getMap().getAnimals().get(realPosition).isEmpty()) {
-                box = createVbox(createLabel(presenter.getMainPresenter().getMap().animalsAt(realPosition).iterator().next().toString()));
+                Animal animal = presenter.getMainPresenter().getMap().animalsAt(realPosition).iterator().next();
+                box = createVbox(createLabel(animal.toString()));
+                box.setOnMouseClicked(event -> presenter.getMainPresenter().setTrackedAnimal(animal));
                 int energy = presenter.getMainPresenter().getMap().animalsAt(realPosition).iterator().next().getEnergy();
                 if (energy > 255) { energy = 255;}
                 box.setStyle(String.format("-fx-background-color: #%s0000",String.format("%1$02X", energy)));

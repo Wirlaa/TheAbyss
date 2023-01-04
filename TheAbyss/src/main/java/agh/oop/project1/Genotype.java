@@ -21,6 +21,10 @@ public class Genotype {
         }
         this.activeGene = rng.nextInt(0,genes.size());
     }
+    public int getActiveGene() { return activeGene; }
+    public List<Integer> getGenes() {
+        return genes;
+    }
     public Genotype(Animal animal1, Animal animal2) {
         Random rng = new Random();
         genes = new ArrayList<>();
@@ -56,7 +60,6 @@ public class Genotype {
         activeGene = (activeGene + 1) % genes.size();
         return genes.get(activeGene);
     }
-    public List<Integer> getGenes() {
-        return genes;
-    }
+    @Override
+    public String toString() { return genes.toString(); }
 }

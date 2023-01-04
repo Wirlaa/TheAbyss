@@ -62,6 +62,7 @@ public class HellishGateMap extends AWorldMap{
 
     @Override
     public boolean killAnimal(Animal animal) {
+        animal.setDeathDate(date);
         notifyAnimalDeathObservers(animal);
         return animals.remove(animal.getPosition(), animal);
     }
@@ -73,6 +74,7 @@ public class HellishGateMap extends AWorldMap{
                 if (eatingAnimal != null){
                     plants.remove(pos);
                     eatingAnimal.addEnergy(simulationOptions.energyFromOnePlant());
+                    eatingAnimal.incrementPlantsEaten();
                 }
             }
         }

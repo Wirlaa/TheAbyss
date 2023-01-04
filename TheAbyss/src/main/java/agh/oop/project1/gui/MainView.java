@@ -33,15 +33,26 @@ public class MainView extends BorderPane {
 
         Button optionsButton = new Button("Options");
         optionsButton.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
-        optionsButton.setStyle("-fx-background-color: #998800; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
-        optionsButton.setOnAction(event -> presenter.switchOptions());
+        optionsButton.setStyle("-fx-background-color: #009911; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
+        optionsButton.setOnAction(event -> presenter.toggleOptions());
 
-        hbox.getChildren().addAll(pauseButton, resumeButton, optionsButton);
+        Button trackedAnimalButton = new Button("Track animal");
+        trackedAnimalButton.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
+        trackedAnimalButton.setStyle("-fx-background-color: #998800; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
+        trackedAnimalButton.setOnAction(event -> presenter.toggleAnimalTracking());
+
+        /*Button statisticsButton = new Button("Statistics");
+        statisticsButton.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
+        statisticsButton.setStyle("-fx-background-color: #998800; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
+        statisticsButton.setOnAction(event -> presenter.toggleStatistics());*/
+
+        hbox.getChildren().addAll(pauseButton, resumeButton, optionsButton, trackedAnimalButton);
         setTop(hbox);
     }
     public void setPresenter (MainPresenter presenter) {
         this.presenter = presenter;
     }
+    //w sumie mozna by switcha robic
     public void setContentCenter(Node content) {
         Platform.runLater(() -> {
             setCenter(content);
@@ -51,6 +62,12 @@ public class MainView extends BorderPane {
     public void setContentRight(Node content) {
         Platform.runLater(() -> {
             setRight(content);
+            getScene().getWindow().sizeToScene();
+        });
+    }
+    public void setContentLeft(Node content) {
+        Platform.runLater(() -> {
+            setLeft(content);
             getScene().getWindow().sizeToScene();
         });
     }

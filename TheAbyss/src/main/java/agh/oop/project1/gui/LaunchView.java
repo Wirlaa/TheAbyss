@@ -28,7 +28,7 @@ public class LaunchView extends BorderPane {
         simulationParameters.setStyle("-fx-text-fill: #CCCCCC; -fx-font-size: 35; -fx-font-weight: bold");
 
         Label instructions = new Label(
-                "Load a predefined configuration or enter simulation parameters and press setOptions to confirm. " +
+                "Load a predefined configuration or enter simulation parameters and press SetOptions to confirm. " +
                         "Then press start to run the simulation.");
         instructions.setStyle("-fx-text-fill: #CCCCCC; -fx-font-size: 15");
         instructions.setTextAlignment(TextAlignment.CENTER);

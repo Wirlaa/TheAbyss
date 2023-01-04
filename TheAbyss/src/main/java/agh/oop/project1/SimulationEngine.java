@@ -9,10 +9,12 @@ import java.util.Random;
 
 public class SimulationEngine implements IEngine {
     private final List<ISimulationChangeObserver> observers = new ArrayList<>();
+    private final List<IAnimalObserver> animalObservers = new ArrayList<>();
     private SimulationOptions simulationOptions;
     private IPreferableFields preferableFields;
     private IWorldMap map;
     public Multimap<Vector2d, Animal> animals = HashMultimap.create();
+    public Animal trackedAnimal = null;
     public SimulationEngine(IWorldMap map, SimulationOptions simulationOptions){
         Random rng = new Random();
         this.simulationOptions = simulationOptions;
@@ -25,15 +27,7 @@ public class SimulationEngine implements IEngine {
             map.placeAnimal(animal);
         }
     }
-    public void pause() {
-        synchronized (this) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+    public void setTrackedAnimal(Animal trackedAnimal) { this.trackedAnimal = trackedAnimal; }
     public void run() {
         MapVisualizer mapVisualizer = new MapVisualizer(map);
         System.out.println( mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
@@ -43,29 +37,16 @@ public class SimulationEngine implements IEngine {
             map.eatAndPlaceNewPlants();
             breedTheAnimals();
             try {
-                Thread.sleep(200);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
             simulationChanged();
+            if (trackedAnimal != null) animalChanged(trackedAnimal);
             System.out.println(mapVisualizer.draw(new Vector2d(0, 0), map.getUpperRightBound()));
             map.stepDateUp();
         }
     }
-    /*public void resume() {
-        synchronized (Thread.currentThread()) {
-            Thread.currentThread().notify();
-        }
-    }
-    public void await() {
-        synchronized (Thread.currentThread()) {
-            try {
-                Thread.currentThread().wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }*/
     private void breedTheAnimals() {
         for (Vector2d j : animals.keySet()) {
             Object[] animalsToBreed = Utils.fightForYourDeath(animals.get(j)
@@ -99,15 +80,18 @@ public class SimulationEngine implements IEngine {
         animals.remove(oldPosition,animal);
         animals.put(newPosition, animal);
     }
-    public void addObserver (ISimulationChangeObserver observer) {
-        observers.add(observer);
-    }
-    public void removeObserver (ISimulationChangeObserver observer) {
-        observers.remove(observer);
-    }
+    public void addObserver(ISimulationChangeObserver observer) { observers.add(observer); }
+    public void removeObserver (ISimulationChangeObserver observer) { observers.remove(observer); }
+    public void addObserver (IAnimalObserver observer) { animalObservers.add(observer); }
+    public void removeObserver (IAnimalObserver observer) { animalObservers.remove(observer); }
     public void simulationChanged() {
         for (ISimulationChangeObserver observer: observers) {
             observer.simulationChanged();
+        }
+    }
+    private void animalChanged(Animal animal) {
+        for (IAnimalObserver i : animalObservers) {
+            i.animalChanged(animal);
         }
     }
 }

@@ -1,6 +1,5 @@
 package agh.oop.project1.gui;
 
-
 import agh.oop.project1.ISimulationChangeObserver;
 
 public class MapPresenter implements ISimulationChangeObserver {

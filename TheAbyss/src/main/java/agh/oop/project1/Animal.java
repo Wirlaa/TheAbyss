@@ -9,6 +9,8 @@ public class Animal extends AMapElement {
     private int energy;
     private int offspringCount;
     private int birthDate;
+    private int plantsEaten;
+    private int deathDate;
     public Animal(Vector2d initialPosition, IWorldMap map, Genotype genes, int initialEnergy){
         Random rng = new Random();
         position = initialPosition;
@@ -17,6 +19,8 @@ public class Animal extends AMapElement {
         energy = initialEnergy;
         this.genes = genes;
         offspringCount = 0;
+        plantsEaten = 0;
+        deathDate = -1;
         this.birthDate = map.getDate();
     }
     public Animal(Vector2d initialPosition, IWorldMap map, Integer geneCount, int initialEnergy){
@@ -58,9 +62,7 @@ public class Animal extends AMapElement {
     public void addPositionChangeObserver(IPositionChangeObserver observer){
         positionChangeObservers.add(observer);
     }
-    public void removePositionChangeObserver(IPositionChangeObserver observer){
-        positionChangeObservers.removeIf(i -> Objects.equals(observer, i));
-    }
+    public void removePositionChangeObserver(IPositionChangeObserver observer){ positionChangeObservers.remove(observer); }
     private void positionChanged(Vector2d oldPosition, Vector2d newPosition){
         ((IPositionChangeObserver) map).positionChanged(oldPosition, newPosition, this);
         for (IPositionChangeObserver i : positionChangeObservers) {
@@ -97,9 +99,11 @@ public class Animal extends AMapElement {
     public void incrementOffspringCount() {
         this.offspringCount += 1;
     }
-    public Genotype getGenes() {
-        return genes;
-    }
+    public void incrementPlantsEaten() { this.plantsEaten++;}
+    public int getPlantsEaten() { return plantsEaten; }
+    public void setDeathDate(int deathDate) { this.deathDate = deathDate; }
+    public int getDeathDate() { return deathDate; }
+    public Genotype getGenes() { return genes; }
     public int getBirthDate() {
         return birthDate;
     }
