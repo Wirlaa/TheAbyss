@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Genotype {
-    private List<Integer> genes;
+    private final List<Integer> genes;
     private int activeGene;
     public Genotype(List<Integer> genes){
         Random rng = new Random();
@@ -21,26 +21,28 @@ public class Genotype {
         }
         this.activeGene = rng.nextInt(0,genes.size());
     }
+
+    public Genotype(Genotype genotype1, Genotype genotype2, int ratio1, int ratio2) {
+        Random rng = new Random();
+        genes = new ArrayList<>();
+        int ratioSum = ratio1 + ratio2;
+        if(ratioSum == 0)
+            System.out.println("Meh");
+        int genesFrom1 = ratio1 / ratioSum * genotype1.getGenes().size();
+        int genesFrom2 = genotype2.getGenes().size() - genesFrom1;
+        if(rng.nextBoolean()){
+            genes.addAll(genotype1.getGenes().subList(0,genesFrom1));
+            genes.addAll(genotype2.getGenes().subList(genesFrom1, genotype2.getGenes().size()));
+        } else {
+            genes.addAll(genotype2.getGenes().subList(0,genesFrom2));
+            genes.addAll(genotype1.getGenes().subList(genesFrom2, genotype1.getGenes().size()));
+        }
+    }
     public int getActiveGene() { return activeGene; }
     public List<Integer> getGenes() {
         return genes;
     }
-    public Genotype(Animal animal1, Animal animal2) {
-        Random rng = new Random();
-        genes = new ArrayList<>();
-        int parentEnergySum = animal1.getEnergy() + animal2.getEnergy();
-        if(parentEnergySum == 0)
-            System.out.println("Meh");
-        int genesFrom1 = animal1.getEnergy() / parentEnergySum * animal1.getGenes().size();
-        int genesFrom2 = animal2.getGenes().size() - genesFrom1;
-        if(rng.nextBoolean()){
-            genes.addAll(animal1.getGenes().getGenes().subList(0,genesFrom1));
-            genes.addAll(animal2.getGenes().getGenes().subList(genesFrom1, animal2.getGenes().size()));
-        } else {
-            genes.addAll(animal2.getGenes().getGenes().subList(0,genesFrom2));
-            genes.addAll(animal1.getGenes().getGenes().subList(genesFrom2, animal1.getGenes().size()));
-        }
-    }
+
     public void mutateGenes(int minMutatedGenes, int maxMutatedGenes) {
         Random rng = new Random();
         int mutatedGeneCount = rng.nextInt(minMutatedGenes, maxMutatedGenes + 1);

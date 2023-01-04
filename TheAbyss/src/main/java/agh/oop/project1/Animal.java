@@ -31,7 +31,7 @@ public class Animal extends AMapElement {
         position = animal1.getPosition();
         orientation = MapDirection.values()[rng.nextInt(0,8)];
         this.map = animal1.getMap();
-        genes = new Genotype(animal1, animal2);
+        genes = new Genotype(animal1.getGenes(), animal2.getGenes(), animal1.getEnergy(), animal2.getEnergy());
         mutateGenes();
         animal1.subtractEnergy(map.getSimulationOptions().reproductionCost());
         animal2.subtractEnergy(map.getSimulationOptions().reproductionCost());

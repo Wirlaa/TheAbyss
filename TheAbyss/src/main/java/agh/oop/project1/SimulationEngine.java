@@ -3,10 +3,13 @@ package agh.oop.project1;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class SimulationEngine implements IEngine {
     private SimulationStatistics simStats;
+    UUID uuid = UUID.randomUUID();
     private final List<ISimulationChangeObserver> observers = new ArrayList<>();
     private final List<IAnimalObserver> animalObservers = new ArrayList<>();
     private SimulationOptions simulationOptions;
@@ -14,7 +17,6 @@ public class SimulationEngine implements IEngine {
     private IWorldMap map;
     public Multimap<Vector2d, Animal> animals = HashMultimap.create();
     public Animal trackedAnimal = null;
-    public SimulationEngine(IWorldMap map, SimulationOptions simulationOptions){
     public SimulationEngine(IWorldMap map, SimulationOptions simulationOptions, SimulationStatistics simStats){
         Random rng = new Random();
         this.simulationOptions = simulationOptions;
@@ -29,12 +31,63 @@ public class SimulationEngine implements IEngine {
         }
     }
     public void setTrackedAnimal(Animal trackedAnimal) { this.trackedAnimal = trackedAnimal; }
+    public void pause() {
+        synchronized (this) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    private void appendToFile(){
+        try
+        {
+            FileWriter fw = new FileWriter("stats"+uuid.toString()+".csv",true);
+            fw.write("\n"+ map.getDate() + ", "
+                    + simStats.getAliveAnimalsCount() + ", "
+            + simStats.getPlantsOnMap() + ", "
+            + simStats.getFreeFields() + ", "
+            + simStats.getTheMostPopularGentype().toString().replace(",", " ") + ", "
+            + simStats.getAverageEnergy() + ", "
+            + simStats.getAverageAge());
+            fw.close();
+        }
+        catch(IOException ioe)
+        {
+            System.err.println("IOException: " + ioe.getMessage());
+        }
+    }
+
+    public void makeFile(){
+        try
+        {
+            FileWriter fw = new FileWriter("stats"+uuid.toString()+".csv",true);
+            fw.write("Date" + ", "
+                    + "Number of Animals" + ", "
+                    + "Number of plants" + ", "
+                    + "Number of free fields" + ", "
+                    + "The most popular genotype" + ", "
+                    + "Average Energy" + ", "
+                    + "Average Age");
+            fw.close();
+        }
+        catch(IOException ioe)
+        {
+            System.err.println("IOException: " + ioe.getMessage());
+        }
+
+    }
     public void run() {
+        makeFile();
         MapVisualizer mapVisualizer = new MapVisualizer(map);
-        System.out.println( mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
+        //System.out.println( mapVisualizer.draw(new Vector2d(0,0), map.getUpperRightBound()));
         simulationChanged();
         while(true){
             updateStats();
+            if(simulationOptions.savingStatistics()){
+                appendToFile();
+            }
             killOrMoveAnimal();
             map.eatAndPlaceNewPlants();
             breedTheAnimals();
@@ -137,47 +190,5 @@ public class SimulationEngine implements IEngine {
         for (IAnimalObserver i : animalObservers) {
             i.animalChanged(animal);
         }
-    }
-
-    private void updateStats(){
-        int freeFields = 0;
-        for (int i = 0; i < simulationOptions.mapWidth(); i++) {
-            for (int j = 0; j < simulationOptions.mapHeight(); j++) {
-                if(animals.get(new Vector2d(i, j)).isEmpty()) freeFields++;
-            }
-        }
-        simStats.setFreeFields(freeFields);
-        Set<List<Integer>> genotypes = new HashSet<>();
-        Map<List<Integer>, Integer> numberOfGenotypes = new HashMap<>();
-        for (Animal animal : animals.values()) {
-            if(genotypes.contains(animal.getGenes().getGenes())){
-                numberOfGenotypes.put(animal.getGenes().getGenes(), numberOfGenotypes.get(animal.getGenes().getGenes())+1);
-            } else {
-                numberOfGenotypes.put(animal.getGenes().getGenes(), 1);
-                genotypes.add(animal.getGenes().getGenes());
-            }
-        }
-        simStats.setTheMostPopularGentype(genotypes.stream()
-                        .max(new Comparator<List<Integer>>() {
-            @Override
-            public int compare(List<Integer> o1, List<Integer> o2) {
-                return Integer.compare(numberOfGenotypes.get(o1), numberOfGenotypes.get(o2));
-            }
-        })
-                        .orElse(null)
-        );
-        int sum = 0;
-        for (Integer i :
-                animals.values().stream()
-                        .map(x -> x.getEnergy())
-                        .toList()) {
-            sum += i;
-        }
-        simStats.setAverageEnergy(
-                sum /((float) animals.values().stream()
-                        .map(x -> x.getEnergy())
-                        .toList()
-                        .size())
-        );
     }
 }

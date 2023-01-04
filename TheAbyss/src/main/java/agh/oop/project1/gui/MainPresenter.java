@@ -29,7 +29,7 @@ public class MainPresenter {
     public SimulationOptions getOptions() { return options; }
     public void initSimulation(SimulationOptions options) {
         this.options = options;
-        simStats = new SimulationStatistics();
+        simStats = new SimulationStatistics(options.initialAnimalCount());
         IWorldMap map = new HellishGateMap(options.mapWidth(), options.mapHeight(), options, simStats);
         simStats.setMap(map);
         this.map = map;

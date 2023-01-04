@@ -65,7 +65,7 @@ public class LaunchPresenter {
     public SimulationOptions getOptions() { return options; }
     public void setOptions(int[] intOptions, boolean corpseToxicity) {
         options = new SimulationOptions(intOptions[0], intOptions[1], corpseToxicity, intOptions[2], intOptions[3], intOptions[4],
-                intOptions[5], intOptions[6], intOptions[7], intOptions[8], intOptions[9], intOptions[10], intOptions[11]);
+                intOptions[5], intOptions[6], intOptions[7], intOptions[8], intOptions[9], intOptions[10], intOptions[11], true);
     }
     public static boolean isNumber(String strNum) {
         if (strNum == null) {

@@ -3,7 +3,9 @@ package agh.oop.project1;
 import java.util.List;
 
 public class SimulationStatistics implements IAnimalDeathObserver {
+
     private int aliveAnimalsCount = 0;
+    private int initialAnimalCount;
     private int plantsOnMap = 0;
     private int freeFields = 0;
     private List<Integer> theMostPopularGentype;
@@ -13,8 +15,8 @@ public class SimulationStatistics implements IAnimalDeathObserver {
 
     IWorldMap map;
 
-    public SimulationStatistics(){
-
+    public SimulationStatistics(int initialAnimalCount){
+        this.initialAnimalCount = initialAnimalCount;
     }
 
     public void setMap(IWorldMap map){
@@ -53,7 +55,7 @@ public class SimulationStatistics implements IAnimalDeathObserver {
     }
 
     public int getAliveAnimalsCount() {
-        return aliveAnimalsCount;
+        return aliveAnimalsCount + initialAnimalCount;
     }
 
     public int getPlantsOnMap() {
@@ -73,6 +75,9 @@ public class SimulationStatistics implements IAnimalDeathObserver {
     }
 
     public float getAverageAge() {
-        return ageSum/deadAnimals;
+        return ageSum/((float)(deadAnimals == 0 ? 1 : deadAnimals));
+    }
+    public void setAliveAnimalsCount(int aliveAnimalsCount) {
+        this.aliveAnimalsCount = aliveAnimalsCount;
     }
 }
