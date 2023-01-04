@@ -3,12 +3,15 @@ package agh.oop.project1;
 import java.util.*;
 
 public class HellishGateMap extends AWorldMap{
+
+    SimulationStatistics simStats;
     IPreferableFields preferableFields;
     private static final Vector2d LOWER_BOUND = new Vector2d(0,0);
     private static Vector2d upper_bound;
     List<IAnimalDeathObserver> animalDeathObserverList = new ArrayList<>();
-    public HellishGateMap(int width, int height, SimulationOptions simulationOptions){
+    public HellishGateMap(int width, int height, SimulationOptions simulationOptions, SimulationStatistics simStats){
         Random rng = new Random();
+        this.simStats = simStats;
         upper_bound = new Vector2d(width-1, height-1);
         this.simulationOptions = simulationOptions;
         if(simulationOptions.corpseToxicity()){
@@ -38,6 +41,7 @@ public class HellishGateMap extends AWorldMap{
         for (Vector2d vector2d : first) {
             if (plantAt(vector2d) == null) {
                 plants.put(vector2d, new Plant(vector2d));
+                simStats.plantPlanted();
                 found = true;
                 break;
             }
@@ -47,6 +51,7 @@ public class HellishGateMap extends AWorldMap{
             for (Vector2d vector2d : second) {
                 if (plantAt(vector2d) == null) {
                     plants.put(vector2d, new Plant(vector2d));
+                    simStats.plantPlanted();
                     found = true;
                     break;
                 }
@@ -73,6 +78,7 @@ public class HellishGateMap extends AWorldMap{
                 Animal eatingAnimal = (Utils.fightForYourDeath(animals.get(pos), 1).size() == 1 ? Utils.fightForYourDeath(animals.get(pos), 1).get(0) : null);
                 if (eatingAnimal != null){
                     plants.remove(pos);
+                    simStats.plantEaten();
                     eatingAnimal.addEnergy(simulationOptions.energyFromOnePlant());
                     eatingAnimal.incrementPlantsEaten();
                 }
@@ -101,6 +107,12 @@ public class HellishGateMap extends AWorldMap{
     public Vector2d getUpperRightBound() {
         return upper_bound;
     }
+
+    @Override
+    public void addAnimalDeathObserver(IAnimalDeathObserver observer) {
+        animalDeathObserverList.add(observer);
+    }
+
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition, Animal animalToRemove){
         animals.remove(oldPosition, animalToRemove);
@@ -122,5 +134,8 @@ public class HellishGateMap extends AWorldMap{
     // huh? czemu sa dwie funkcje upperbound?
     public static Vector2d getUpper_bound() {
         return upper_bound;
+    }
+    public void setSimStats(SimulationStatistics simStats) {
+        this.simStats = simStats;
     }
 }

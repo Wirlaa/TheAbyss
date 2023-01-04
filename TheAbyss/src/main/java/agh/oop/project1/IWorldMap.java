@@ -60,6 +60,8 @@ public interface IWorldMap {
     //map getters not used in the end
     Multimap<Vector2d, Animal> getAnimals();
     Map<Vector2d, Plant> getPlants();
+    void addAnimalDeathObserver(IAnimalDeathObserver observer);
 
+    void setSimStats(SimulationStatistics simStats);
 
 }

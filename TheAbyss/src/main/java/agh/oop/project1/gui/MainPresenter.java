@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class MainPresenter {
+    SimulationStatistics simStats;
     private IWorldMap map;
     private IEngine engine;
     private Thread engineThread;
@@ -28,9 +29,13 @@ public class MainPresenter {
     public SimulationOptions getOptions() { return options; }
     public void initSimulation(SimulationOptions options) {
         this.options = options;
-        IWorldMap map = new HellishGateMap(options.mapWidth(), options.mapHeight(), options);
+        simStats = new SimulationStatistics();
+        IWorldMap map = new HellishGateMap(options.mapWidth(), options.mapHeight(), options, simStats);
+        simStats.setMap(map);
         this.map = map;
-        IEngine engine = new SimulationEngine(map, options);
+        map.addAnimalDeathObserver(simStats);
+        map.setSimStats(simStats);
+        IEngine engine = new SimulationEngine(map, options, simStats);
         this.engine = engine;
 
         MapPresenter mapPresenter = new MapPresenter(new MapView(),this);
