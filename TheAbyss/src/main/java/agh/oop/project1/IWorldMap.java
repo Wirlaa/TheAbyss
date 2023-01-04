@@ -39,7 +39,7 @@ public interface IWorldMap {
      */
     //potrzebuje, zeby sprawdzalo tylko zwierzeta
     default boolean isOccupied(Vector2d position){
-        return (!animalsAt(position).isEmpty());// || (plantAt(position) != null);
+        return (!animalsAt(position).isEmpty() || (plantAt(position) != null));
     }
     void eatAndPlaceNewPlants();
     /**
