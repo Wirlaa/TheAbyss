@@ -5,4 +5,5 @@ public interface IEngine extends Runnable, IPositionChangeObserver, ISimulationC
     void addSimulationChangeObserver(ISimulationChangeObserver observer);
     void addAnimalObserver(IAnimalObserver observer);
     void setTrackedAnimal(Animal trackedAnimal);
+    SimulationStatistics getSimStats();
 }

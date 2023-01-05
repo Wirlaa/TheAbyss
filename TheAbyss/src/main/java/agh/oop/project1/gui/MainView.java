@@ -31,22 +31,22 @@ public class MainView extends BorderPane {
         resumeButton.setStyle("-fx-background-color: #006699; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
         resumeButton.setOnAction(event -> presenter.resume());
 
-        Button optionsButton = new Button("Options");
-        optionsButton.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
-        optionsButton.setStyle("-fx-background-color: #009911; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
-        optionsButton.setOnAction(event -> presenter.toggleOptions());
-
         Button trackedAnimalButton = new Button("Track animal");
         trackedAnimalButton.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
-        trackedAnimalButton.setStyle("-fx-background-color: #998800; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
+        trackedAnimalButton.setStyle("-fx-background-color: #009911; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
         trackedAnimalButton.setOnAction(event -> presenter.toggleAnimalTracking());
 
-        /*Button statisticsButton = new Button("Statistics");
-        statisticsButton.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
-        statisticsButton.setStyle("-fx-background-color: #998800; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
-        statisticsButton.setOnAction(event -> presenter.toggleStatistics());*/
+        Button optionsButton = new Button("Options");
+        optionsButton.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
+        optionsButton.setStyle("-fx-background-color: #998800; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
+        optionsButton.setOnAction(event -> presenter.toggleOptions());
 
-        hbox.getChildren().addAll(pauseButton, resumeButton, optionsButton, trackedAnimalButton);
+        Button statisticsButton = new Button("Statistics");
+        statisticsButton.setPrefSize(BUTTONWIDTH, BUTTONHEIGHT);
+        statisticsButton.setStyle("-fx-background-color: #996600; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
+        statisticsButton.setOnAction(event -> presenter.toggleStatistics());
+
+        hbox.getChildren().addAll(pauseButton, resumeButton, trackedAnimalButton, optionsButton, statisticsButton);
         setTop(hbox);
     }
     public void setPresenter (MainPresenter presenter) {

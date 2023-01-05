@@ -146,6 +146,12 @@ public class SimulationEngine implements IEngine {
             observer.simulationChanged();
         }
     }
+    private void animalChanged(Animal animal) {
+        for (IAnimalObserver i : animalObservers) {
+            i.animalChanged(animal);
+        }
+    }
+    public SimulationStatistics getSimStats() { return simStats; }
     private void updateStats(){
         int freeFields = 0;
         for (int i = 0; i < simulationOptions.mapWidth(); i++) {
@@ -186,10 +192,5 @@ public class SimulationEngine implements IEngine {
                         .toList()
                         .size())
         );
-    }
-    private void animalChanged(Animal animal) {
-        for (IAnimalObserver i : animalObservers) {
-            i.animalChanged(animal);
-        }
     }
 }
