@@ -10,7 +10,6 @@ public class HellishGateMap extends AWorldMap{
     private static Vector2d upper_bound;
     List<IAnimalDeathObserver> animalDeathObserverList = new ArrayList<>();
     public HellishGateMap(int width, int height, SimulationOptions simulationOptions, SimulationStatistics simStats){
-        Random rng = new Random();
         this.simStats = simStats;
         upper_bound = new Vector2d(width-1, height-1);
         this.simulationOptions = simulationOptions;
@@ -47,7 +46,6 @@ public class HellishGateMap extends AWorldMap{
             }
         }
         if(!found){
-            found = false;
             for (Vector2d vector2d : second) {
                 if (plantAt(vector2d) == null) {
                     plants.put(vector2d, new Plant(vector2d));
@@ -66,12 +64,6 @@ public class HellishGateMap extends AWorldMap{
     }
 
     @Override
-    public boolean killAnimal(Animal animal) {
-        animal.setDeathDate(date);
-        notifyAnimalDeathObservers(animal);
-        return animals.remove(animal.getPosition(), animal);
-    }
-    @Override
     public void eatAndPlaceNewPlants() {
         for (Vector2d pos : animals.keySet()) {
             if(plants.get(pos) != null){
@@ -85,10 +77,6 @@ public class HellishGateMap extends AWorldMap{
             }
         }
         placeNPlants(simulationOptions.plantsGrowingEachDay());
-    }
-    @Override
-    public Collection<Animal> animalsAt(Vector2d position) {
-        return animals.get(position);
     }
     @Override
     public Plant plantAt(Vector2d position) {
@@ -125,13 +113,14 @@ public class HellishGateMap extends AWorldMap{
         }
         animalToRemove.subtractEnergy(simulationOptions.reproductionCost());
     }
-    private void notifyAnimalDeathObservers(Animal animal){
+    protected void notifyAnimalDeathObservers(Animal animal){
         for (IAnimalDeathObserver i :
                 animalDeathObserverList) {
             i.animalDied(animal);
         }
     }
     // huh? czemu sa dwie funkcje upperbound?
+    // Nie wiem XD
     public static Vector2d getUpper_bound() {
         return upper_bound;
     }

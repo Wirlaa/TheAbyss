@@ -3,12 +3,12 @@ package agh.oop.project1;
 import java.util.*;
 
 public class Animal extends AMapElement {
-    private IWorldMap map;
+    private final IWorldMap map;
     private final List<IPositionChangeObserver> positionChangeObservers = new ArrayList<>();
-    private Genotype genes;
+    private final Genotype genes;
     private int energy;
     private int offspringCount;
-    private int birthDate;
+    private final int birthDate;
     private int plantsEaten;
     private int deathDate;
     public Animal(Vector2d initialPosition, IWorldMap map, Genotype genes, int initialEnergy){
@@ -95,9 +95,6 @@ public class Animal extends AMapElement {
     }
     public int getEnergy() {
         return energy;
-    }
-    public void incrementOffspringCount() {
-        this.offspringCount += 1;
     }
     public void incrementPlantsEaten() { this.plantsEaten++;}
     public int getPlantsEaten() { return plantsEaten; }

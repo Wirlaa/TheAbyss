@@ -8,13 +8,12 @@ import java.io.IOException;
 import java.util.*;
 
 public class SimulationEngine implements IEngine {
-    private SimulationStatistics simStats;
+    private final SimulationStatistics simStats;
     UUID uuid = UUID.randomUUID();
     private final List<ISimulationChangeObserver> observers = new ArrayList<>();
     private final List<IAnimalObserver> animalObservers = new ArrayList<>();
-    private SimulationOptions simulationOptions;
-    private IPreferableFields preferableFields;
-    private IWorldMap map;
+    private final SimulationOptions simulationOptions;
+    private final IWorldMap map;
     public Multimap<Vector2d, Animal> animals = HashMultimap.create();
     public Animal trackedAnimal = null;
     public SimulationEngine(IWorldMap map, SimulationOptions simulationOptions, SimulationStatistics simStats){
@@ -43,38 +42,38 @@ public class SimulationEngine implements IEngine {
     private void appendToFile(){
         try
         {
-            FileWriter fw = new FileWriter("stats"+uuid.toString()+".csv",true);
-            fw.write("\n"+ map.getDate() + ", "
+            FileWriter fileWriter = new FileWriter("stats"+uuid.toString()+".csv",true);
+            fileWriter.write("\n"+ map.getDate() + ", "
                     + simStats.getAliveAnimalsCount() + ", "
             + simStats.getPlantsOnMap() + ", "
             + simStats.getFreeFields() + ", "
             + simStats.getTheMostPopularGentype().toString().replace(",", " ") + ", "
             + simStats.getAverageEnergy() + ", "
             + simStats.getAverageAge());
-            fw.close();
+            fileWriter.close();
         }
-        catch(IOException ioe)
+        catch(IOException ioException)
         {
-            System.err.println("IOException: " + ioe.getMessage());
+            System.err.println("IOException: " + ioException.getMessage());
         }
     }
 
     public void makeFile(){
         try
         {
-            FileWriter fw = new FileWriter("stats"+uuid.toString()+".csv",true);
-            fw.write("Date" + ", "
+            FileWriter fileWriter = new FileWriter("stats"+uuid.toString()+".csv",true);
+            fileWriter.write("Date" + ", "
                     + "Number of Animals" + ", "
                     + "Number of plants" + ", "
                     + "Number of free fields" + ", "
                     + "The most popular genotype" + ", "
                     + "Average Energy" + ", "
                     + "Average Age");
-            fw.close();
+            fileWriter.close();
         }
-        catch(IOException ioe)
+        catch(IOException ioException)
         {
-            System.err.println("IOException: " + ioe.getMessage());
+            System.err.println("IOException: " + ioException.getMessage());
         }
 
     }
@@ -108,7 +107,7 @@ public class SimulationEngine implements IEngine {
         for (Vector2d position : animals.keySet()) {
             Object[] animalsToBreed = Utils.fightForYourDeath(animals.get(position)
                     .stream()
-                    .filter(x -> {return x.getEnergy() >= simulationOptions.energyToReproduce();})
+                    .filter(x -> x.getEnergy() >= simulationOptions.energyToReproduce())
                     .toList(), 2)
                     .toArray();
             if (animalsToBreed.length == 2) {
@@ -138,9 +137,9 @@ public class SimulationEngine implements IEngine {
         animals.remove(oldPosition,animal);
         animals.put(newPosition, animal);
     }
-    public void addObserver(ISimulationChangeObserver observer) { observers.add(observer); }
+    public void addSimulationChangeObserver(ISimulationChangeObserver observer) { observers.add(observer); }
     public void removeObserver (ISimulationChangeObserver observer) { observers.remove(observer); }
-    public void addObserver (IAnimalObserver observer) { animalObservers.add(observer); }
+    public void addAnimalObserver(IAnimalObserver observer) { animalObservers.add(observer); }
     public void removeObserver (IAnimalObserver observer) { animalObservers.remove(observer); }
     public void simulationChanged() {
         for (ISimulationChangeObserver observer: observers) {
@@ -177,13 +176,13 @@ public class SimulationEngine implements IEngine {
         int sum = 0;
         for (Integer i :
                 animals.values().stream()
-                        .map(x -> x.getEnergy())
+                        .map(Animal::getEnergy)
                         .toList()) {
             sum += i;
         }
         simStats.setAverageEnergy(
                 sum /((float) animals.values().stream()
-                        .map(x -> x.getEnergy())
+                        .map(Animal::getEnergy)
                         .toList()
                         .size())
         );

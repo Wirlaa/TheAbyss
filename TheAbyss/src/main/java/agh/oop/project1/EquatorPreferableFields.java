@@ -8,7 +8,6 @@ public class EquatorPreferableFields implements IPreferableFields {
     Set<Vector2d> betterFields = new HashSet<>();
     Set<Vector2d> worseFields = new HashSet<>();
     public EquatorPreferableFields(int width, int height){
-        Random rng = new Random();
         List<Vector2d> fields = new ArrayList<>(width*height);
         for(int i = 0; i<width; i++){
             for (int j = 0; j < height; j++) {

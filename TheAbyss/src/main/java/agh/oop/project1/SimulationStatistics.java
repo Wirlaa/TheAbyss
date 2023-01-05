@@ -5,7 +5,7 @@ import java.util.List;
 public class SimulationStatistics implements IAnimalDeathObserver {
 
     private int aliveAnimalsCount = 0;
-    private int initialAnimalCount;
+    private final int initialAnimalCount;
     private int plantsOnMap = 0;
     private int freeFields = 0;
     private List<Integer> theMostPopularGentype;

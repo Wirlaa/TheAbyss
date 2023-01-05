@@ -8,11 +8,7 @@ import java.util.Random;
 public class Genotype {
     private final List<Integer> genes;
     private int activeGene;
-    public Genotype(List<Integer> genes){
-        Random rng = new Random();
-        this.genes = genes;
-        this.activeGene = rng.nextInt() % genes.size();
-    }
+
     public Genotype(int geneCount){
         Random rng = new Random();
         genes = new ArrayList<>();
