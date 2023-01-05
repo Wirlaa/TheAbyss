@@ -64,4 +64,7 @@ public interface IWorldMap {
 
     void setSimStats(SimulationStatistics simStats);
 
+    String getBGPath(Vector2d position);
+
+    int getMaxEnergy();
 }

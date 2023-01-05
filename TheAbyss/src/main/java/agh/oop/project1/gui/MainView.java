@@ -8,6 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainView extends BorderPane {
     static final int BUTTONWIDTH = 100;
     static final int BUTTONHEIGHT = 20;

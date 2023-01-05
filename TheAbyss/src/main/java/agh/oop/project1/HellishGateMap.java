@@ -127,4 +127,18 @@ public class HellishGateMap extends AWorldMap{
     public void setSimStats(SimulationStatistics simStats) {
         this.simStats = simStats;
     }
+
+    @Override
+    public String getBGPath(Vector2d position) {
+        if(plantAt(position) != null){
+            return "src/main/resources/images/bgWithPlant.png";
+        } else {
+            return "src/main/resources/images/bg.png";
+        }
+    }
+
+    @Override
+    public int getMaxEnergy() {
+        return animals.values().stream().map(Animal::getEnergy).max(Integer::compare).orElse(null);
+    }
 }

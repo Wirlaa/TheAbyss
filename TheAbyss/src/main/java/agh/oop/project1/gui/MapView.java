@@ -1,28 +1,54 @@
 package agh.oop.project1.gui;
 
 import agh.oop.project1.Animal;
+import agh.oop.project1.IWorldMap;
 import agh.oop.project1.Vector2d;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapView extends GridPane {
-    static final int WIDTH = 18;
-    static final int HEIGHT = 18;
+    static final int WIDTH = 40;
+    static final int HEIGHT = 40;
     private Node[][] vboxArray;
     private MapPresenter presenter;
+
+    private static List<Image> bgImages = new ArrayList<Image>();
+    private static List<Image> animalImages = new ArrayList<Image>();
     public MapView() {
         setAlignment(Pos.CENTER);
         setStyle("-fx-background-color: #333333");
         setHgap(1);
         setVgap(1);
+        try {
+            if(bgImages.isEmpty()) {
+                bgImages.add(new Image(new FileInputStream("src/main/resources/images/bg.png")));
+                bgImages.add(new Image(new FileInputStream("src/main/resources/images/bgWithPlant.png")));
+            }
+            if(animalImages.isEmpty()){
+                animalImages.add(new Image(new FileInputStream("src/main/resources/images/Animal0.png")));
+                animalImages.add(new Image(new FileInputStream("src/main/resources/images/Animal1.png")));
+                animalImages.add(new Image(new FileInputStream("src/main/resources/images/Animal2.png")));
+                animalImages.add(new Image(new FileInputStream("src/main/resources/images/Animal3.png")));
+                animalImages.add(new Image(new FileInputStream("src/main/resources/images/Animal4.png")));
+                animalImages.add(new Image(new FileInputStream("src/main/resources/images/Animal5.png")));
+                animalImages.add(new Image(new FileInputStream("src/main/resources/images/MultipleAnimals.png")));
+                animalImages.add(new Image(new FileInputStream("src/main/resources/images/TrackedAnimal.png")));
+            }
+        } catch (FileNotFoundException e){
+            System.out.println("FILE NOT FOUND");
+        }
         //mapLayout();
         //placeElements();
     }
@@ -72,7 +98,7 @@ public class MapView extends GridPane {
                 result = object.toString();
             }
          */
-        for (Vector2d gridPosition: positionsGrid) {
+        for (Vector2d gridPosition: positionsGrid) {/*
             Vector2d realPosition = new Vector2d(gridPosition.x()-1,presenter.getMainPresenter().getMap().getUpperRightBound().y()-gridPosition.y()+1);
             VBox box = null;
             if (!presenter.getMainPresenter().getMap().getAnimals().get(realPosition).isEmpty()) {
@@ -89,18 +115,57 @@ public class MapView extends GridPane {
             }
             if (box != null) {
                 add(box, gridPosition.x(), gridPosition.y());
-            }
+            }*/
             //vboxArray[position.x()-1][position.y()-1-presenter.getMainPresenter().getMap().getUpperRightBound().y()] = box;
             /*add(new GuiElementBox(element, element.getMapLabel()).getField(),
                     -map.getLowerBound().getX() + 1 + position.getX(),
                     map.getUpperBound().getY() + 1 - position.getY());*/
+            Vector2d realPosition = new Vector2d(gridPosition.x()-1,presenter.getMainPresenter().getMap().getUpperRightBound().y()-gridPosition.y()+1);
+            IWorldMap map = presenter.getMainPresenter().getMap();
+            VBox box = new VBox();
+            box.setBackground(new Background(new BackgroundImage(map.plantAt(realPosition) == null ? bgImages.get(0) : bgImages.get(1),
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    new BackgroundPosition(Side.LEFT, WIDTH, false, Side.TOP, HEIGHT, false),
+                    new BackgroundSize(
+                            WIDTH, HEIGHT,
+                            false, false,
+                            true, true
+                    )
+            )));
+            if (!map.animalsAt(realPosition).isEmpty() ) {
+                ImageView imageView;
+                Animal animal = (Animal) map.animalsAt(realPosition).toArray()[0];
+                if (map.animalsAt(realPosition).size() == 1) {
+                    imageView = new ImageView(animalImages.get(animal.getImageNumber(map.getMaxEnergy())));
+                } else {
+                    imageView = new ImageView(animalImages.get(6));
+                }
+                imageView.setFitHeight(HEIGHT);
+                imageView.setFitWidth(WIDTH);
+                box.getChildren().add(imageView);
+                box.setAlignment(Pos.CENTER);
+                box.setOnMouseClicked(event -> presenter.getMainPresenter().setTrackedAnimal(animal));
+            }
+            add(box,gridPosition.x(), gridPosition.y());
         }
         Animal animal = presenter.getMainPresenter().getTrackedAnimal();
         if (animal != null) {
+            IWorldMap map = presenter.getMainPresenter().getMap();
+            ImageView imageView = new ImageView(animalImages.get(7));
+            imageView.setFitHeight(HEIGHT);
+            imageView.setFitWidth(WIDTH);
+            VBox box = new VBox(imageView);
+            box.setAlignment(Pos.CENTER);
+            box.setOnMouseClicked(event -> presenter.getMainPresenter().setTrackedAnimal(animal));
+            box.getChildren().remove(box.getChildren().stream().filter(o -> o.getLayoutX() == animal.getPosition().x() && o.getLayoutY() == animal.getPosition().y()).findFirst().orElse(null));
+            add(box, animal.getPosition().x() + 1, presenter.getMainPresenter().getMap().getUpperRightBound().y() - animal.getPosition().y() + 1);
+        }
+        /*if (animal != null) {
             VBox box = createVbox(createLabel(animal.toString()));
             box.setStyle("-fx-background-color: #BB00DD");
             add(box, animal.getPosition().x() + 1, presenter.getMainPresenter().getMap().getUpperRightBound().y() - animal.getPosition().y() + 1);
-        }
+        }*/
     }
     private VBox createVbox(Label label) {
         VBox vbox = new VBox(label);

@@ -107,4 +107,8 @@ public class Animal extends AMapElement {
     public int getOffspringCount() {
         return offspringCount;
     }
+    public int getImageNumber(int maxEnergy){
+        int number = (int) (energy/((float) maxEnergy) * 6);
+        return number;
+    }
 }
