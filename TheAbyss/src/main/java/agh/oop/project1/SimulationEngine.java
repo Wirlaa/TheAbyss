@@ -31,6 +31,7 @@ public class SimulationEngine implements IEngine {
         }
     }
     public void setTrackedAnimal(Animal trackedAnimal) { this.trackedAnimal = trackedAnimal; }
+    public Animal getTrackedAnimal() { return trackedAnimal; }
     public void run() {
         if(simulationOptions.savingStatistics()) {
             makeFile();

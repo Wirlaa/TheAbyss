@@ -42,7 +42,9 @@ public class AnimalTrackerView extends VBox {
         else {
             trackingButton.setOnAction(event -> presenter.getMainPresenter().stopTracking());
             // mozna jakis fajniejszy text, zrobilam label zeby nie bylo pusto
-            Label trackingLabel = createValueLabel("Tracking is on");
+            Label trackingLabel = createNameLabel("Tracking is on");
+            trackingLabel.setPrefSize(presenter.getMainPresenter().getOptions().genomeLength()*15, HEIGHT);
+            trackingLabel.setStyle("-fx-background-color: #115522; -fx-text-fill: #CCCCCC; -fx-font-weight: bold");
             HBox trackingBox = new HBox(trackingButton,trackingLabel);
             trackingBox.setSpacing(10);
             trackingBox.setAlignment(Pos.CENTER);

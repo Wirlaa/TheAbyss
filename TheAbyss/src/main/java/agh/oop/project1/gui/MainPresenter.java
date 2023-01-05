@@ -25,11 +25,13 @@ public class MainPresenter {
     }
     public IWorldMap getMap() { return map; }
     public MainView getView(){ return view; }
+    public SimulationOptions getOptions() { return options; }
+    public Animal getTrackedAnimal() { return engine.getTrackedAnimal(); }
+    public void setTrackedAnimal(Animal trackedAnimal) { this.trackedAnimal = trackedAnimal; }
     public void setMapPresenter(MapPresenter mapPresenter) { this.mapPresenter = mapPresenter; }
     public void setOptionsPresenter(OptionsPresenter optionsPresenter) { this.optionsPresenter = optionsPresenter; }
     public void setAnimalTrackerPresenter(AnimalTrackerPresenter animalTrackerPresenter) { this.animalTrackerPresenter = animalTrackerPresenter; }
     public void setStatisticsPresenter(StatisticsPresenter statisticsPresenter) { this.statisticsPresenter = statisticsPresenter; }
-    public SimulationOptions getOptions() { return options; }
     public void initSimulation(SimulationOptions options) {
         this.options = options;
         simStats = new SimulationStatistics(options.initialAnimalCount());
@@ -64,6 +66,7 @@ public class MainPresenter {
         stage.setOnCloseRequest(event -> engineThread.stop());
     }
     public void updateView() {
+        mapPresenter.getView().buildView();
         view.setContentCenter(mapPresenter.getView());
     }
     public void createThread() {
@@ -117,13 +120,14 @@ public class MainPresenter {
             showingStatistics = false;
         }
     }
-    public void setTrackedAnimal(Animal trackedAnimal) { this.trackedAnimal = trackedAnimal; }
     public void startTracking() {
         engine.setTrackedAnimal(trackedAnimal);
+        updateView();
         animalTrackerPresenter.getView().refreshView(trackedAnimal);
     }
     public void stopTracking() {
         engine.setTrackedAnimal(null);
+        updateView();
         animalTrackerPresenter.getView().refreshView(null);
     }
     // taki scuffed to do:

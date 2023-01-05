@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapView extends GridPane {
-    static final int WIDTH = 15;
-    static final int HEIGHT = 15;
+    static final int WIDTH = 18;
+    static final int HEIGHT = 18;
     private Node[][] vboxArray;
     private MapPresenter presenter;
     public MapView() {
@@ -94,6 +94,12 @@ public class MapView extends GridPane {
             /*add(new GuiElementBox(element, element.getMapLabel()).getField(),
                     -map.getLowerBound().getX() + 1 + position.getX(),
                     map.getUpperBound().getY() + 1 - position.getY());*/
+        }
+        Animal animal = presenter.getMainPresenter().getTrackedAnimal();
+        if (animal != null) {
+            VBox box = createVbox(createLabel(animal.toString()));
+            box.setStyle("-fx-background-color: #BB00DD");
+            add(box, animal.getPosition().x() + 1, presenter.getMainPresenter().getMap().getUpperRightBound().y() - animal.getPosition().y() + 1);
         }
     }
     private VBox createVbox(Label label) {
