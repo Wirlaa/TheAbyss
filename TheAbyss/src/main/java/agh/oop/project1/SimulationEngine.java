@@ -11,10 +11,9 @@ public class SimulationEngine implements IEngine {
     UUID uuid = UUID.randomUUID();
     private final List<ISimulationChangeObserver> observers = new ArrayList<>();
     private final List<IAnimalObserver> animalObservers = new ArrayList<>();
-    private SimulationOptions simulationOptions;
-    private IPreferableFields preferableFields;
-    private IWorldMap map;
-    private SimulationStatistics simStats;
+    private final SimulationOptions simulationOptions;
+    private final IWorldMap map;
+    private final SimulationStatistics simStats;
     public Multimap<Vector2d, Animal> animals = HashMultimap.create();
     public Animal trackedAnimal = null;
     public SimulationEngine(IWorldMap map, SimulationOptions simulationOptions, SimulationStatistics simStats){
@@ -62,7 +61,7 @@ public class SimulationEngine implements IEngine {
         for (Vector2d position : animals.keySet()) {
             Object[] animalsToBreed = Utils.fightForYourDeath(animals.get(position)
                     .stream()
-                    .filter(x -> {return x.getEnergy() >= simulationOptions.energyToReproduce();})
+                    .filter(x -> x.getEnergy() >= simulationOptions.energyToReproduce())
                     .toList(), 2)
                     .toArray();
             if (animalsToBreed.length == 2) {
@@ -92,9 +91,9 @@ public class SimulationEngine implements IEngine {
         animals.remove(oldPosition,animal);
         animals.put(newPosition, animal);
     }
-    public void addObserver(ISimulationChangeObserver observer) { observers.add(observer); }
+    public void addSimulationChangeObserver(ISimulationChangeObserver observer) { observers.add(observer); }
     public void removeObserver (ISimulationChangeObserver observer) { observers.remove(observer); }
-    public void addObserver (IAnimalObserver observer) { animalObservers.add(observer); }
+    public void addAnimalObserver(IAnimalObserver observer) { animalObservers.add(observer); }
     public void removeObserver (IAnimalObserver observer) { animalObservers.remove(observer); }
     public void simulationChanged() {
         for (ISimulationChangeObserver observer: observers) {
@@ -137,13 +136,13 @@ public class SimulationEngine implements IEngine {
         int sum = 0;
         for (Integer i :
                 animals.values().stream()
-                        .map(x -> x.getEnergy())
+                        .map(Animal::getEnergy)
                         .toList()) {
             sum += i;
         }
         simStats.setAverageEnergy(
                 sum /((float) animals.values().stream()
-                        .map(x -> x.getEnergy())
+                        .map(Animal::getEnergy)
                         .toList()
                         .size())
         );

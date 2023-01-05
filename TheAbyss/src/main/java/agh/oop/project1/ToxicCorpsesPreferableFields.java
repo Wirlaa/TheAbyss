@@ -6,7 +6,7 @@ import static java.util.Map.Entry.comparingByValue;
 
 public class ToxicCorpsesPreferableFields implements IPreferableFields, IAnimalDeathObserver{
     HashMap<Vector2d, Integer> deathCount = new HashMap<>();
-    private int fieldsCount;
+    private final int fieldsCount;
     public ToxicCorpsesPreferableFields(int width, int height){
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {

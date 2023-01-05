@@ -2,6 +2,7 @@ package agh.oop.project1;
 
 import com.google.common.collect.*;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,10 @@ public abstract class AWorldMap implements IWorldMap, IPositionChangeObserver{
     SimulationOptions simulationOptions;
     @Override
     public Multimap<Vector2d, Animal> getAnimals() { return ImmutableMultimap.copyOf(animals); }
+    @Override
+    public Collection<Animal> animalsAt(Vector2d position) {
+        return animals.get(position);
+    }
     @Override
     public Map<Vector2d, Plant> getPlants() { return Collections.unmodifiableMap(plants); }
     @Override
@@ -35,5 +40,12 @@ public abstract class AWorldMap implements IWorldMap, IPositionChangeObserver{
     }
     public void stepDateUp(){
         date += 1;
+    }
+    protected abstract void notifyAnimalDeathObservers(Animal animal);
+    @Override
+    public boolean killAnimal(Animal animal) {
+        animal.setDeathDate(date);
+        notifyAnimalDeathObservers(animal);
+        return animals.remove(animal.getPosition(), animal);
     }
 }

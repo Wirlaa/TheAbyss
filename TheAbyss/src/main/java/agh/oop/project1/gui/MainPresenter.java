@@ -44,18 +44,18 @@ public class MainPresenter {
         this.engine = engine;
 
         MapPresenter mapPresenter = new MapPresenter(new MapView(),this);
-        engine.addObserver(mapPresenter);
+        engine.addSimulationChangeObserver(mapPresenter);
         setMapPresenter(mapPresenter);
 
         OptionsPresenter newOptionsPresenter = new OptionsPresenter(new OptionsView(true), this);
         setOptionsPresenter(newOptionsPresenter);
 
         AnimalTrackerPresenter animalTrackerPresenter = new AnimalTrackerPresenter(new AnimalTrackerView(null),this);
-        engine.addObserver(animalTrackerPresenter);
+        engine.addAnimalObserver(animalTrackerPresenter);
         setAnimalTrackerPresenter(animalTrackerPresenter);
 
         StatisticsPresenter statisticsPresenter = new StatisticsPresenter(new StatisticsView(engine.getSimStats()),this);
-        engine.addObserver(statisticsPresenter);
+        engine.addSimulationChangeObserver(statisticsPresenter);
         setStatisticsPresenter(statisticsPresenter);
 
         Stage stage = new Stage();
