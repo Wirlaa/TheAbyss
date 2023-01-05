@@ -36,12 +36,12 @@ public class StatisticsView extends VBox {
         Label averageEnergyNameLabel = createNameLabel(averageEnergyString);
         Label averageAgeNameLabel = createNameLabel(averageAgeString);
 
-        Label aliveAnimalsCountValueLabel = createValueLabel(Integer.toString(statistics.getAliveAnimalsCount()));
-        Label plantsOnMapValueLabel = createValueLabel(Integer.toString(statistics.getPlantsOnMap()));
-        Label emptyFieldsValueLabel = createValueLabel(Integer.toString(statistics.getFreeFields()));
-        Label popularGenotypeValueLabel = createValueLabel(statistics.getTheMostPopularGentype().toString());
-        Label averageEnergyValueLabel = createValueLabel(Float.toString(statistics.getAverageEnergy()));
-        Label averageAgeValueLabel = createValueLabel(Float.toString(statistics.getAverageAge()));
+        Label aliveAnimalsCountValueLabel = createValueLabel(String.valueOf(statistics.getAliveAnimalsCount()));
+        Label plantsOnMapValueLabel = createValueLabel(String.valueOf(statistics.getPlantsOnMap()));
+        Label emptyFieldsValueLabel = createValueLabel(String.valueOf(statistics.getFreeFields()));
+        Label popularGenotypeValueLabel = createValueLabel(String.valueOf(statistics.getTheMostPopularGenotype()));
+        Label averageEnergyValueLabel = createValueLabel(String.valueOf(statistics.getAverageEnergy()));
+        Label averageAgeValueLabel = createValueLabel(String.valueOf(statistics.getAverageAge()));
 
         HBox aliveAnimalsCountBox = createHBox(aliveAnimalsCountNameLabel,aliveAnimalsCountValueLabel);
         HBox plantsOnMapBox = createHBox(plantsOnMapNameLabel,plantsOnMapValueLabel);

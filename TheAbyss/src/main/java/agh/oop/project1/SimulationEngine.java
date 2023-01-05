@@ -124,13 +124,8 @@ public class SimulationEngine implements IEngine {
                 genotypes.add(animal.getGenes().getGenes());
             }
         }
-        simStats.setTheMostPopularGentype(genotypes.stream()
-                .max(new Comparator<List<Integer>>() {
-                    @Override
-                    public int compare(List<Integer> o1, List<Integer> o2) {
-                        return Integer.compare(numberOfGenotypes.get(o1), numberOfGenotypes.get(o2));
-                    }
-                })
+        simStats.setTheMostPopularGenotype(genotypes.stream()
+                .max(Comparator.comparingInt(numberOfGenotypes::get))
                 .orElse(null)
         );
         int sum = 0;
@@ -155,7 +150,7 @@ public class SimulationEngine implements IEngine {
                     + simStats.getAliveAnimalsCount() + ", "
                     + simStats.getPlantsOnMap() + ", "
                     + simStats.getFreeFields() + ", "
-                    + simStats.getTheMostPopularGentype().toString().replace(",", " ") + ", "
+                    + simStats.getTheMostPopularGenotype().toString().replace(",", " ") + ", "
                     + simStats.getAverageEnergy() + ", "
                     + simStats.getAverageAge());
             fw.close();
