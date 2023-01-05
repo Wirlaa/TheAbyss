@@ -7,10 +7,10 @@ public class Animal extends AMapElement {
     private final List<IPositionChangeObserver> positionChangeObservers = new ArrayList<>();
     private final Genotype genes;
     private int energy;
-    private int offspringCount;
+    private int offspringCount = 0;
     private final int birthDate;
-    private int plantsEaten;
-    private int deathDate;
+    private int plantsEaten = 0;
+    private int deathDate = -1;
     public Animal(Vector2d initialPosition, IWorldMap map, Genotype genes, int initialEnergy){
         Random rng = new Random();
         position = initialPosition;
@@ -18,9 +18,6 @@ public class Animal extends AMapElement {
         this.map = map;
         energy = initialEnergy;
         this.genes = genes;
-        offspringCount = 0;
-        plantsEaten = 0;
-        deathDate = -1;
         this.birthDate = map.getDate();
     }
     public Animal(Vector2d initialPosition, IWorldMap map, Integer geneCount, int initialEnergy){

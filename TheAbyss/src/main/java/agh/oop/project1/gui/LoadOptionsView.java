@@ -19,9 +19,9 @@ public class LoadOptionsView extends VBox {
         setSpacing(10);
         setAlignment(Pos.CENTER);
 
-        String config1String = "Pierwsza konfiguracja";
-        String config2String = "Druga konfiguracja";
-        String config3String = "Trzecia konfiguracja";
+        String config1String = "First configuration";
+        String config2String = "Second configuration";
+        String config3String = "Third configuration";
 
         Label config1NameLabel = createNameLabel(config1String);
         Label config2NameLabel = createNameLabel(config2String);

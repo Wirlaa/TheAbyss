@@ -44,6 +44,7 @@ public abstract class AWorldMap implements IWorldMap, IPositionChangeObserver{
     protected abstract void notifyAnimalDeathObservers(Animal animal);
     @Override
     public boolean killAnimal(Animal animal) {
+        System.out.println("death " + date);
         animal.setDeathDate(date);
         notifyAnimalDeathObservers(animal);
         return animals.remove(animal.getPosition(), animal);

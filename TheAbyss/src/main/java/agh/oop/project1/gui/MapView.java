@@ -16,7 +16,6 @@ import java.util.List;
 public class MapView extends GridPane {
     static final int WIDTH = 18;
     static final int HEIGHT = 18;
-    private Node[][] vboxArray;
     private MapPresenter presenter;
     public MapView() {
         setAlignment(Pos.CENTER);
@@ -39,7 +38,6 @@ public class MapView extends GridPane {
     private void mapLayout() {
         int numOfColumns = presenter.getMainPresenter().getMap().getUpperRightBound().x();
         int numOfRows = presenter.getMainPresenter().getMap().getUpperRightBound().y();
-        //vboxArray = new Node[numOfColumns+2][numOfRows+2]; //za mala tablica?
 
         add(createVbox(createLabel("y\\x")),0,0);
 
@@ -53,7 +51,6 @@ public class MapView extends GridPane {
             for (int j = 1; j < numOfRows + 2; j++) {
                 VBox box = createVbox(createLabel(""));
                 add(box,i,j);
-                //vboxArray[i][j] = box;
             }
         }
     }
@@ -75,12 +72,13 @@ public class MapView extends GridPane {
         for (Vector2d gridPosition: positionsGrid) {
             Vector2d realPosition = new Vector2d(gridPosition.x()-1,presenter.getMainPresenter().getMap().getUpperRightBound().y()-gridPosition.y()+1);
             VBox box = null;
-            if (!presenter.getMainPresenter().getMap().getAnimals().get(realPosition).isEmpty()) {
+            if (!presenter.getMainPresenter().getMap().animalsAt(realPosition).isEmpty()) {
                 Animal animal = presenter.getMainPresenter().getMap().animalsAt(realPosition).iterator().next();
                 box = createVbox(createLabel(animal.toString()));
                 box.setOnMouseClicked(event -> presenter.getMainPresenter().setTrackedAnimal(animal));
                 int energy = presenter.getMainPresenter().getMap().animalsAt(realPosition).iterator().next().getEnergy();
-                if (energy > 255) { energy = 255;}
+                if (energy > 255) { energy = 255; }
+                else if (energy < 0) { energy = 0; }
                 box.setStyle(String.format("-fx-background-color: #%s0000",String.format("%1$02X", energy)));
             } else if (presenter.getMainPresenter().getMap().plantAt(realPosition) != null) {
                 //box = createVbox(createLabel(presenter.getMainPresenter().getMap().plantAt(realPosition).toString()));
@@ -90,13 +88,9 @@ public class MapView extends GridPane {
             if (box != null) {
                 add(box, gridPosition.x(), gridPosition.y());
             }
-            //vboxArray[position.x()-1][position.y()-1-presenter.getMainPresenter().getMap().getUpperRightBound().y()] = box;
-            /*add(new GuiElementBox(element, element.getMapLabel()).getField(),
-                    -map.getLowerBound().getX() + 1 + position.getX(),
-                    map.getUpperBound().getY() + 1 - position.getY());*/
         }
         Animal animal = presenter.getMainPresenter().getTrackedAnimal();
-        if (animal != null) {
+        if (animal != null && animal.getDeathDate() == -1) {
             VBox box = createVbox(createLabel(animal.toString()));
             box.setStyle("-fx-background-color: #BB00DD");
             add(box, animal.getPosition().x() + 1, presenter.getMainPresenter().getMap().getUpperRightBound().y() - animal.getPosition().y() + 1);

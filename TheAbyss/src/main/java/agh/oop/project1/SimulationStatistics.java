@@ -26,12 +26,12 @@ public class SimulationStatistics implements IAnimalDeathObserver {
     public void plantEaten(){ plantsOnMap--; }
     public void plantPlanted(){ plantsOnMap++; }
     public void setFreeFields(int i){ freeFields = i; }
-    public void setTheMostPopularGentype(List<Integer> theMostPopularGentype) { this.theMostPopularGenotype = theMostPopularGentype; }
+    public void setTheMostPopularGenotype(List<Integer> theMostPopularGenotype) { this.theMostPopularGenotype = theMostPopularGenotype; }
     public void setAverageEnergy(float i){ averageEnergy = i; }
     public int getAliveAnimalsCount() { return aliveAnimalsCount + initialAnimalCount; }
     public int getPlantsOnMap() { return plantsOnMap; }
     public int getFreeFields() { return freeFields; }
-    public List<Integer> getTheMostPopularGentype() { return theMostPopularGenotype; }
+    public List<Integer> getTheMostPopularGenotype() { return theMostPopularGenotype;}
     public float getAverageEnergy() { return averageEnergy; }
     public float getAverageAge() { return ageSum/((float)(deadAnimals == 0 ? 1 : deadAnimals)); }
     public void setAliveAnimalsCount(int aliveAnimalsCount) { this.aliveAnimalsCount = aliveAnimalsCount; }
