@@ -29,13 +29,13 @@ public class LoadOptionsView extends VBox {
 
         RadioButton config1RButton = new RadioButton();
         config1RButton.setToggleGroup(group);
-        config1RButton.setOnAction(event -> presenter.loadConfiguration("src/main/resources/configuration1"));
+        config1RButton.setOnAction(event -> presenter.loadConfiguration("src/main/resources/configurations/configuration1"));
         RadioButton config2RButton = new RadioButton();
         config2RButton.setToggleGroup(group);
-        config2RButton.setOnAction(event -> presenter.loadConfiguration("src/main/resources/configuration2"));
+        config2RButton.setOnAction(event -> presenter.loadConfiguration("src/main/resources/configurations/configuration2"));
         RadioButton config3RButton = new RadioButton();
         config3RButton.setToggleGroup(group);
-        config3RButton.setOnAction(event -> presenter.loadConfiguration("src/main/resources/configuration3"));
+        config3RButton.setOnAction(event -> presenter.loadConfiguration("src/main/resources/configurations/configuration3"));
 
         HBox config1Box = createHBox(config1NameLabel,config1RButton);
         HBox config2Box = createHBox(config2NameLabel,config2RButton);
