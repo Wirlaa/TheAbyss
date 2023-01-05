@@ -49,17 +49,12 @@ public class MainPresenter {
         setOptionsPresenter(newOptionsPresenter);
 
         AnimalTrackerPresenter animalTrackerPresenter = new AnimalTrackerPresenter(new AnimalTrackerView(null),this);
-<<<<<<< HEAD
         engine.addAnimalObserver(animalTrackerPresenter);
-        setStatisticsPresenter(animalTrackerPresenter);
-=======
-        engine.addObserver(animalTrackerPresenter);
         setAnimalTrackerPresenter(animalTrackerPresenter);
 
         StatisticsPresenter statisticsPresenter = new StatisticsPresenter(new StatisticsView(engine.getSimStats()),this);
-        engine.addObserver(statisticsPresenter);
+        engine.addSimulationChangeObserver(statisticsPresenter);
         setStatisticsPresenter(statisticsPresenter);
->>>>>>> 169ebe12ad04c93305023ca9b66eac0202c71b4d
 
         Stage stage = new Stage();
         stage.setScene(new Scene(getView()));
