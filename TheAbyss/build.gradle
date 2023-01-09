@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+application {
+    getMainClass().set('agh.oop.project1.Main')
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+javafx {
+    version = "17"
+    modules = [ 'javafx.controls' ]
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    implementation 'com.google.guava:guava:31.1-jre'
+}
+
+test {
+    useJUnitPlatform()
+}
